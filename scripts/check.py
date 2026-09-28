@@ -2,8 +2,20 @@
 # -*- coding: utf-8 -*-
 """
 项目校验脚本 —— 改动后必跑：python3 scripts/check.py
-检查 markdown 结构/断链 + HTML 标签平衡/嵌套/断链。
 0 问题才算完成。（本脚本由 AI 创建，按 AGENT.md 规矩保留在 scripts/ 中，勿删）
+
+校验三块：
+  A. Markdown（根目录 + docs/）
+       H1 唯一 · 标题层级不跳跃 · 专题页含「返回大纲」 · 相对链接不断链
+  B. Vue 工程（web/）
+       路由表 ↔ 视图文件一一对应（无孤儿、无缺件）
+       路由字段完整（path/name/meta.nav/meta.title，且路径与名字唯一）
+       导航项数与路由一致、标签文字唯一
+       入口文件 / App / main.js 结构完整
+       无残留的旧静态站链接（page-*.html、index.html、style.css）
+       .gitignore 确实挡住了 node_modules 与 dist
+  C. 构建产物（web/dist 若存在）
+       index.html 引用的 js / css 真实存在
 """
 import io
 import os
@@ -11,17 +23,19 @@ import re
 import glob
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+WEB = os.path.join(ROOT, 'web')
+VIEWS = os.path.join(WEB, 'src', 'views')
+ROUTES = os.path.join(WEB, 'src', 'router', 'routes.js')
 
 MD_TAGS = ['div', 'section', 'table', 'tr', 'td', 'th', 'p', 'b', 'a', 'ul', 'li',
            'h1', 'h2', 'h3', 'h4', 'span', 'nav', 'main', 'header', 'footer']
 
 
+# ─────────────────────────── A. Markdown ───────────────────────────
 def scan_md(path):
-    """返回问题列表"""
     probs = []
     s = io.open(path, encoding='utf-8').read()
 
-    # 标题（豁免英文副标题行；剔除围栏代码块，避免把 shell 注释 # 当标题）
     s_nocode = re.sub(r'```.*?```', '', s, flags=re.S)
     heads = [(len(m.group(1)), m.group(2))
              for m in re.finditer(r'^(#{1,6})\s+(.+)$', s_nocode, re.M)]
@@ -37,12 +51,10 @@ def scan_md(path):
             probs.append('标题层级跳跃 %d→%d' % (prev, lv))
         prev = lv
 
-    # 仅要求 docs/ 下的「专题文件」带返回链接（枢纽本身与根目录 README/AGENT 豁免）
     in_docs = os.sep + 'docs' + os.sep in path
     if in_docs and os.path.basename(path) != '大纲.md' and '返回 `大纲.md`' not in s:
         probs.append('缺少「返回大纲」链接')
 
-    # 相对链接断链
     base = os.path.dirname(path)
     for t in sorted(set(re.findall(r'\]\((\./[^)#]+)\)', s))):
         tgt = os.path.normpath(os.path.join(base, t[2:]))
@@ -52,60 +64,221 @@ def scan_md(path):
     return probs
 
 
-def scan_html(path):
+# ─────────────────────────── B. Vue 工程 ───────────────────────────
+def _need(probs, path, why):
+    if not os.path.exists(path):
+        probs.append('缺少 %s（%s）' % (os.path.relpath(path, ROOT), why))
+        return False
+    return True
+
+
+def scan_vue_structure():
+    """必备文件是否齐全、入口是否接线正确"""
     probs = []
-    s = io.open(path, encoding='utf-8').read()
+    for rel, why in [
+        ('web/package.json', '依赖与脚本定义'),
+        ('web/vite.config.js', '构建配置'),
+        ('web/index.html', 'Vite 入口 HTML'),
+        ('web/src/main.js', '应用挂载入口'),
+        ('web/src/App.vue', '根组件'),
+        ('web/src/router/index.js', '路由实例'),
+        (os.path.relpath(ROUTES, ROOT), '路由表（唯一真值）'),
+        ('web/src/components/SiteNav.vue', '共享导航'),
+        ('web/src/assets/style.css', '全站样式'),
+    ]:
+        _need(probs, os.path.join(ROOT, rel), why)
 
-    # 标签开闭平衡
-    for t in MD_TAGS:
-        o = len(re.findall(r'<%s(?=[\s>])' % t, s))
-        c = len(re.findall(r'</%s>' % t, s))
-        if o != c:
-            probs.append('<%s> 开=%d 闭=%d' % (t, o, c))
+    idx = os.path.join(WEB, 'index.html')
+    if os.path.exists(idx):
+        s = io.open(idx, encoding='utf-8').read()
+        if 'id="app"' not in s:
+            probs.append('web/index.html 缺少挂载点 #app')
+        if 'src/main.js' not in s:
+            probs.append('web/index.html 未引用 /src/main.js')
 
-    # 嵌套深度
-    for t in ('div', 'section'):
-        depth, minimum = 0, 0
-        for m in re.finditer(r'</?%s(?=[\s>])' % t, s):
-            depth += -1 if m.group(0).startswith('</') else 1
-            minimum = min(minimum, depth)
-        if depth != 0:
-            probs.append('<%s> 最终深度=%d（应为 0）' % (t, depth))
-        if minimum < 0:
-            probs.append('<%s> 嵌套深度为负（多余闭合）' % t)
+    main = os.path.join(WEB, 'src', 'main.js')
+    if os.path.exists(main):
+        s = io.open(main, encoding='utf-8').read()
+        if 'createApp' not in s or '.mount(' not in s:
+            probs.append('main.js 未调用 createApp(...).mount()')
+        if 'style.css' not in s:
+            probs.append('main.js 未引入全局样式 style.css')
+        if 'router' not in s:
+            probs.append('main.js 未安装 router')
 
-    # href 断链
-    base = os.path.dirname(path)
-    for h in sorted(set(re.findall(r'href="([^"#][^"]*)"', s))):
-        if h.startswith(('http://', 'https://', 'mailto:')):
-            continue
-        if not os.path.exists(os.path.join(base, h)):
-            probs.append('断链 %s' % h)
-
-    # 导航一致性（每个分页都应有完整导航且唯一 active）
-    nav = s.split('<nav>')[1].split('</nav>')[0] if '<nav>' in s else ''
-    if nav:
-        n = len(re.findall(r'<a href=', nav))
-        act = len(re.findall(r'class="active"', nav))
-        if n != 11:
-            probs.append('导航项=%d（应为 11）' % n)
-        if act != 1:
-            probs.append('active 数=%d（应为 1）' % act)
+    app = os.path.join(WEB, 'src', 'App.vue')
+    if os.path.exists(app):
+        s = io.open(app, encoding='utf-8').read()
+        if '<router-view' not in s:
+            probs.append('App.vue 缺少 <router-view>（页面无出口）')
+        if 'SiteNav' not in s:
+            probs.append('App.vue 未引入 SiteNav（各页会缺导航）')
 
     return probs
 
 
-def main():
-    md_files = sorted(glob.glob(os.path.join(ROOT, '*.md')) +
-                      glob.glob(os.path.join(ROOT, 'docs', '*.md')))
-    html_files = sorted(glob.glob(os.path.join(ROOT, 'site', '*.html')))
+def parse_routes():
+    """从 routes.js 抽出 path / name / nav / title / 组件文件"""
+    s = io.open(ROUTES, encoding='utf-8').read()
+    return {
+        'src': s,
+        'paths': re.findall(r"\bpath:\s*'([^']+)'", s),
+        'names': re.findall(r"\bname:\s*'([^']+)'", s),
+        'navs': re.findall(r"\bnav:\s*'([^']+)'", s),
+        'titles': re.findall(r"\btitle:\s*'([^']+)'", s),
+        'comps': re.findall(r"import\('(@/views/[^']+)'\)", s),
+    }
 
+
+def scan_routes():
+    probs = []
+    if not os.path.exists(ROUTES):
+        return ['无法读取路由表']
+
+    r = parse_routes()
+    n = len(r['paths'])
+
+    if n == 0:
+        return ['路由表为空']
+
+    # 字段完整性
+    for key, label in [('names', 'name'), ('navs', 'meta.nav'),
+                       ('titles', 'meta.title'), ('comps', 'component')]:
+        if len(r[key]) != n:
+            probs.append('路由 %d 条但只有 %d 个 %s（有条目漏写该字段）'
+                         % (n, len(r[key]), label))
+
+    # 唯一性
+    for key, label in [('paths', 'path'), ('names', 'name')]:
+        dup = sorted({x for x in r[key] if r[key].count(x) > 1})
+        if dup:
+            probs.append('重复的 %s：%s' % (label, '、'.join(dup)))
+    dupnav = sorted({x for x in r['navs'] if r['navs'].count(x) > 1})
+    if dupnav:
+        probs.append('重复的导航文字：%s' % '、'.join(dupnav))
+
+    # 首个路由必须是首页
+    if r['paths'][0] != '/':
+        probs.append('首个路由应为 /（当前是 %s）' % r['paths'][0])
+    if not all(p.startswith('/') for p in r['paths']):
+        probs.append('存在不以 / 开头的路由')
+
+    # meta 化：nav/title 若写在顶层会被 vue-router 静默丢弃
+    if re.search(r"\n\s+nav:\s*'", r['src']):
+        probs.append('nav 写在了路由顶层（vue-router 只认 meta，会被丢弃）')
+    if re.search(r"\n\s+title:\s*'", r['src']):
+        probs.append('title 写在了路由顶层（vue-router 只认 meta，会被丢弃）')
+
+    # 组件路径必须都在 @/views 下
+    for c in r['comps']:
+        if not c.startswith('@/views/'):
+            probs.append('组件不在 views 下：%s' % c)
+
+    return probs
+
+
+def scan_views():
+    """路由表 ↔ 视图文件 一一对应"""
+    probs = []
+    if not os.path.exists(ROUTES) or not os.path.isdir(VIEWS):
+        return ['路由表或 views 目录缺失']
+
+    comps = {c.split('/')[-1] for c in parse_routes()['comps']}
+    on_disk = {os.path.basename(p) for p in glob.glob(os.path.join(VIEWS, '*.vue'))}
+
+    missing = sorted(comps - on_disk)
+    if missing:
+        probs.append('路由引用了但文件不存在：%s' % '、'.join(missing))
+
+    orphan = sorted(on_disk - comps)
+    if orphan:
+        probs.append('视图文件没被任何路由引用（孤儿）：%s' % '、'.join(orphan))
+
+    if not on_disk:
+        probs.append('views/ 下没有视图文件')
+
+    return probs
+
+
+def scan_nav():
+    """导航组件必须由路由表生成，且条数一致"""
+    probs = []
+    nav = os.path.join(WEB, 'src', 'components', 'SiteNav.vue')
+    if not os.path.exists(nav):
+        return ['SiteNav.vue 缺失']
+    s = io.open(nav, encoding='utf-8').read()
+
+    if 'routes' not in s:
+        probs.append('SiteNav 未从 routes.js 取导航项（会与路由脱节）')
+    if 'router-link' not in s:
+        probs.append('SiteNav 未使用 <router-link>（点击会整页刷新）')
+    if 'meta.nav' not in s:
+        probs.append('SiteNav 未读取 meta.nav')
+    if 'route.path' not in s:
+        probs.append('SiteNav 未用 route.path 判定激活态')
+
+    return probs
+
+
+def scan_legacy_links():
+    """web/src 里不该残留任何旧静态站的链接方式"""
+    probs = []
+    for p in glob.glob(os.path.join(WEB, 'src', '**', '*'), recursive=True):
+        if not os.path.isfile(p) or not p.endswith(('.vue', '.js', '.html')):
+            continue
+        s = io.open(p, encoding='utf-8').read()
+        rel = os.path.relpath(p, ROOT)
+        for bad in re.findall(r'href="(page-[\w-]+\.html)"', s):
+            probs.append('%s 残留旧链接 %s' % (rel, bad))
+        if re.search(r'href="index\.html"', s):
+            probs.append('%s 残留 href="index.html"（应改为 router-link to="/"）' % rel)
+        if re.search(r'href="style\.css"', s):
+            probs.append('%s 残留 <link href="style.css">（样式应由 main.js 引入）' % rel)
+    return probs
+
+
+def scan_gitignore():
+    probs = []
+    gi = os.path.join(ROOT, '.gitignore')
+    if not os.path.exists(gi):
+        return ['.gitignore 缺失']
+    s = io.open(gi, encoding='utf-8').read()
+    if not re.search(r'(?m)^node_modules/$', s):
+        probs.append('.gitignore 未忽略 node_modules/')
+    if not re.search(r'(?m)^dist/$', s):
+        probs.append('.gitignore 未忽略 dist/（构建产物不该入库）')
+    return probs
+
+
+def scan_dist():
+    """如果构建过，产物必须自洽"""
+    probs = []
+    idx = os.path.join(WEB, 'dist', 'index.html')
+    if not os.path.exists(idx):
+        return None  # 未构建 → 跳过
+    s = io.open(idx, encoding='utf-8').read()
+    if 'id="app"' not in s:
+        probs.append('dist/index.html 缺少 #app')
+    base = os.path.dirname(idx)
+    for ref in re.findall(r'(?:src|href)="\./([^"]+)"', s):
+        if not os.path.exists(os.path.join(base, ref)):
+            probs.append('dist/index.html 引用的资源不存在：%s' % ref)
+    if not glob.glob(os.path.join(WEB, 'dist', 'assets', '*.js')):
+        probs.append('dist/assets 下没有 JS（构建未完成）')
+    return probs
+
+
+# ─────────────────────────── 输出 ───────────────────────────
+def main():
     total_bad = 0
 
-    print('=' * 62)
-    print('Markdown 校验（%d 个）' % len(md_files))
-    print('=' * 62)
-    for f in md_files:
+    print('=' * 64)
+    print('A · Markdown 校验（%d 个）'
+          % len(glob.glob(os.path.join(ROOT, '*.md')) +
+                glob.glob(os.path.join(ROOT, 'docs', '*.md'))))
+    print('=' * 64)
+    for f in sorted(glob.glob(os.path.join(ROOT, '*.md')) +
+                    glob.glob(os.path.join(ROOT, 'docs', '*.md'))):
         p = scan_md(f)
         rel = os.path.relpath(f, ROOT)
         if p:
@@ -116,23 +289,44 @@ def main():
         else:
             print('  OK   %s' % rel)
 
-    print('=' * 62)
-    print('HTML 校验（%d 个）' % len(html_files))
-    print('=' * 62)
-    for f in html_files:
-        p = scan_html(f)
-        rel = os.path.relpath(f, ROOT)
+    print('=' * 64)
+    print('B · Vue 工程校验（web/）')
+    print('=' * 64)
+    vue_checks = [
+        ('工程结构与入口', scan_vue_structure),
+        ('路由表 routes.js', scan_routes),
+        ('路由 ↔ 视图一一对应', scan_views),
+        ('导航组件 SiteNav', scan_nav),
+        ('残留旧静态站链接', scan_legacy_links),
+        ('.gitignore', scan_gitignore),
+    ]
+    for label, fn in vue_checks:
+        p = fn()
         if p:
             total_bad += len(p)
-            print('  FAIL %-34s' % rel)
+            print('  FAIL %s' % label)
             for x in p:
                 print('        - %s' % x)
         else:
-            print('  OK   %s' % rel)
+            print('  OK   %s' % label)
 
-    print('=' * 62)
+    print('=' * 64)
+    print('C · 构建产物 web/dist')
+    print('=' * 64)
+    p = scan_dist()
+    if p is None:
+        print('  SKIP 未构建（跑 scripts/serve.sh build 后再校验）')
+    elif p:
+        total_bad += len(p)
+        print('  FAIL 构建产物')
+        for x in p:
+            print('        - %s' % x)
+    else:
+        print('  OK   构建产物自洽')
+
+    print('=' * 64)
     print('总问题数：%d   %s' % (total_bad, '✅ 全部通过' if total_bad == 0 else '❌ 需修复'))
-    print('=' * 62)
+    print('=' * 64)
     return 1 if total_bad else 0
 
 

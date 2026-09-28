@@ -3,6 +3,7 @@
 > 本文件是给 **AI 助手与协作者** 的项目约定。**动手改任何东西之前，先读这里。**
 > 项目：**埃拉西亚大陆（ERATHIA）** 西幻世界观设定 · 当前 **v13**
 > 枢纽文档：[`docs/大纲.md`](./docs/大纲.md)
+> 站点架构：**Vue 3 + Vite + vue-router（hash 路由）** · 工程在 [`web/`](./web) · 启动 `scripts/serve.sh rebuild`
 
 ---
 
@@ -44,17 +45,40 @@
 │   ├── 大纲.md              ★ 枢纽：全局不变量 / 文件地图 / 阅读路径 / 故事主干
 │   ├── 01_世界底质.md ~ 16_修订记录.md
 │   └── Erathia_Setting_Audit.md   漏洞审计（42 条，S/A/B/C 分级）
-├── site/                  ← HTML 站点（12 个，彼此同级）
-│   ├── index.html           入口
-│   ├── page-*.html          10 个分页
-│   └── style.css            全站共享
-├── scripts/               ★ 长期可复用工具（scripts/check.py 校验脚本）
+├── web/                   ← ★ Vue 3 + Vite 站点（原静态 site/ 已移入 temp/site_static_v13/）
+│   ├── index.html           Vite 入口（挂载点 #app）
+│   ├── package.json         依赖与脚本（★ 入库；node_modules 不入库）
+│   ├── vite.config.js       构建配置（dev/preview 均固定 8000 端口、0.0.0.0）
+│   ├── src/
+│   │   ├── main.js            应用挂载 + 引入全局样式
+│   │   ├── App.vue            根组件（header + SiteNav + router-view）
+│   │   ├── router/routes.js   ★ 路由表 = 全站唯一真值（path / meta.nav / meta.title / 组件）
+│   │   ├── router/index.js    路由实例（hash 模式 · 滚动复位 · 标题同步）
+│   │   ├── components/SiteNav.vue   共享导航（由 routes.js 自动生成）
+│   │   ├── views/*.vue         11 个页面视图（与 docs 专题一一对应）
+│   │   └── assets/style.css    全站样式（原 site/style.css）
+│   └── dist/                构建产物（★ 不入库，`npm run build` 可重建）
+├── scripts/               ★ 长期可复用工具（check.py 校验 · serve.sh 启动 · serve.py 服务）
 ├── temp/                  ★ AI 临时区（一次性脚本 / 测试 / 抓取结果，不删、入库）
 └── archive/               历史存档（v10 拆分前的单体大纲 + v1 单文件站点）
 ```
 
-**两个体系完全独立**：`site/` 里的 HTML **不链接** 任何 `.md`；`docs/` 里的 md **不链接** 任何 `.html`。
-→ 所以 **HTML 可以整体移动而零改链接，md 同理**；但**跨体系不要新增链接**，否则这条独立性会被破坏。
+**两个体系完全独立**：`web/` 里的 Vue 视图 **不链接** 任何 `.md`；`docs/` 里的 md **不链接** 任何 `.html` / `.vue`。
+→ 所以 **前端可以整体移动而零改链接，md 同理**；但**跨体系不要新增链接**，否则这条独立性会被破坏。
+
+**站点怎么跑（Vue 3 + Vite）**
+
+| 场景 | 命令 |
+|---|---|
+| **装依赖**（一次性） | `cd web && npm install` |
+| **开发 · 热更新** | `cd web && npm run dev` → `http://127.0.0.1:8000/` |
+| **只构建** | `scripts/serve.sh build` → 产出 `web/dist/` |
+| **发布到 8000（对外可访问）** | `scripts/serve.sh rebuild`（= build + start） |
+| **状态 / 日志 / 停止** | `scripts/serve.sh status` · `log` · `stop` |
+
+> ⚠️ **开发服务器与静态服务都固定占 8000**，二者**不可同时跑**，换着用先 `stop`。
+> `node_modules/` 与 `dist/` **不入库**（见 `.gitignore`）；入库的是 `package.json` + `package-lock.json` + `src/` + **这份启动方法**。
+> **加一个新页面**：只改 `router/routes.js`（加一条 path / meta.nav / meta.title / 组件）＋ 往 `views/` 放一个 `.vue`——导航自动多一项，`check.py` 会校验两边对齐。
 
 ---
 
@@ -64,8 +88,8 @@
    **不要在枢纽里复制专题的正文**（重复即腐烂，改一处必然忘另一处）。
 2. **数字唯一权威** —— **一切数字以 `docs/15_速查与术语.md` 为准**。
    改数字：**先改 15，再去各专题同步**。任何文件与 15 冲突时，以 15 为真值。
-3. **文件名即接口** —— 文件名一旦发布**不要改**（改名会断掉全部互链）。
-   同理，**不要重命名 HTML 页面**（`page-*.html` 被 11 处导航引用）。
+3. **文件名与 URL 即接口** —— 文件名一旦发布**不要改**（改名会断掉全部互链）。
+   同理，**不要改 `web/src/router/routes.js` 里的 `path`**（URL 被收藏/外链后就断了），也**不要重命名 `views/*.vue`**（`check.py` 会报孤儿视图）。
 
 ---
 
@@ -80,7 +104,8 @@ python3 scripts/check.py
 | 对象 | 检查项 |
 |---|---|
 | `*.md` | H1 唯一 · 标题层级不跳跃 · 页首含「返回大纲」· 相对链接不断链 |
-| `site/*.html` | 标签开闭平衡 · `div/section` 嵌套深度非负 · 所有 `href` 指向真实文件 · 导航项数一致 |
+| `web/`（Vue 源码） | 路由表 ↔ 视图**一一对应**（无孤儿、无缺件） · `path/name/meta.nav/meta.title` 齐全且唯一 · 导航由路由表生成 · **无残留旧静态链接** · `.gitignore` 挡住 `node_modules`/`dist` |
+| `web/dist`（若已构建） | `index.html` 引用的 js/css 真实存在 |
 
 **校验不通过 = 这次改动不算完成。** 修到 0 问题再提交。
 
@@ -114,11 +139,11 @@ python3 scripts/check.py
 ```
 1. 读  docs/大纲.md   → §2 文件地图（改什么去哪找）、§3 阅读路径（按场景读哪几个）
 2. 按场景读对应专题文件（docs/*.md）
-3. 改动（同时改 HTML 镜像，两边内容必须一致）
+3. 改动（**同时改 `web/src/views/*.vue` 镜像**，md 与 vue 两边内容必须一致）
 4. 跑  python3 scripts/check.py   → 修到 0 问题
 5. 更新 docs/16_修订记录.md（写清：改了什么、依据是什么）
 6. 若动了数字 → 先同步 docs/15_速查与术语.md
-7. commit（脚本留在 temp/，不要删）
+7. 改了前端就 `scripts/serve.sh rebuild`（重新构建 + 挂 8000）；commit（脚本留在 temp/，不要删）
 ```
 
 **commit message 惯例**：`docs: ...` / `fix: ...` / `refactor: ...` + 中文说明。

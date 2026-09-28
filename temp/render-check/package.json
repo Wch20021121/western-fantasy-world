@@ -1,0 +1,9 @@
+{
+  "name": "erathia-render-check",
+  "private": true,
+  "type": "module",
+  "description": "一次性渲染验证：dist 能否在 DOM 中真实挂载",
+  "dependencies": {
+    "happy-dom": "^20.14.5"
+  }
+}

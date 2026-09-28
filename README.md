@@ -1,20 +1,31 @@
 # 埃拉西亚大陆 · ERATHIA
 
-一套完整的西方奇幻世界观设定，包含**力量体系、战力规则、历史年表、地理势力**与配套的可浏览 HTML 站点。
+一套完整的西方奇幻世界观设定，包含**力量体系、战力规则、历史年表、地理势力**与配套的可浏览 **Vue 站点**。
 
-> 当前版本：**v13** ｜ 枢纽文档 `docs/大纲.md` ｜ 站点入口 `site/index.html`
+> 当前版本：**v13** ｜ 枢纽文档 `docs/大纲.md` ｜ 站点工程 `web/`（**Vue 3 + Vite**）
 
 ---
 
 ## 快速开始
 
 ```bash
-# 打开可浏览的 HTML 站点
-open site/index.html
+# ① 装依赖（一次性）
+cd web && npm install
+
+# ② 开发 · 热更新 → http://127.0.0.1:8000/
+npm run dev
+
+# ③ 构建 + 对外发布到 8000 端口（回到仓库根目录）
+cd .. && scripts/serve.sh rebuild     # = build + start
+scripts/serve.sh status               # 看是否在跑
+scripts/serve.sh log                  # 看访问日志
 
 # 从枢纽文档读起（推荐入口）
 open docs/大纲.md
 ```
+
+> **依赖与构建产物不入库**（`node_modules/`、`dist/` 见 `.gitignore`）；
+> 入库的是 `package.json` + `package-lock.json` + `src/` + **启动方法**。
 
 ---
 
@@ -51,20 +62,27 @@ open docs/大纲.md
 | `15_速查与术语.md` | **全库唯一数字权威** ＋ 中英术语对照 | 改数字、查翻译 |
 | `16_修订记录.md` | v1 → v13 每轮改了什么、为什么改 | 查某条设定的历史 |
 
-### 🌐 HTML 镜像（`site/index.html` 起 10 页）
+### 🌐 Vue 站点（`web/src/` · 11 个视图）
 
-同一套内容的可浏览版本，全站共享 `site/style.css`，**相对链接、无外部依赖**，直接双击 `site/index.html` 即可。
-
-> 以下文件**均位于 `site/`**，彼此同级，可整体移动而不需改任何链接。
+同一套内容的可浏览版本，**Vue 3 + Vite + vue-router（hash 路由）**，全站共享 `src/assets/style.css`。原静态站点整体存档在 `temp/site_static_v13/`（工作痕迹，不删）。
 
 ```
-index.html          首页 · 目录 · 核心亮点
-page-world.html     世界本源        page-power.html     力量体系 ★ 含 §2.6 战力规则
-page-races.html     种族            page-factions.html  势力
-page-geography.html 地理            page-history.html   战史·时间线
-page-armaments.html 联军军械        page-characters.html 半神与人物
-page-presentation.html 呈现与玩法   page-glossary.html  术语表
+web/src/
+├─ router/routes.js        ★ 路由表 = 全站唯一真值（加页面只改这里）
+├─ router/index.js         hash 模式 · 换页回顶 · 标签标题同步
+├─ components/SiteNav.vue  共享导航（由路由表自动生成，11 项）
+├─ assets/style.css        全站样式
+└─ views/
+    HomeView.vue          首页 · 目录 · 核心亮点
+    WorldView.vue         世界本源        PowerView.vue      力量体系 ★ 含 §2.6 战力规则
+    RacesView.vue         种族            FactionsView.vue   势力
+    GeographyView.vue     地理            HistoryView.vue    战史·时间线
+    ArmamentsView.vue     联军军械        CharactersView.vue 半神与人物
+    PresentationView.vue  呈现与玩法      GlossaryView.vue   术语表
 ```
+
+> **路由用 hash 模式**（`http://host:8000/#/power`），纯静态托管即可运行，**无需服务端 rewrite**；
+> 首屏只加载 `index + vendor`，各页 JS **按路由懒加载**。换页自动回顶、标签标题随之切换。
 
 ### 🔍 漏洞审计
 

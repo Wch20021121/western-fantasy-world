@@ -1,5 +1,19 @@
-# 只忽略工具缓存与系统垃圾；docs/、site/、scripts/、temp/、archive/ 全部入库
+# 只忽略工具缓存与系统垃圾；docs/、web/、scripts/、temp/、archive/ 全部入库
 # 注意：下列规则必须用 / 根锚定，否则会误伤 temp/research/ 等子目录
 /.agent-browser/
 /research/
 .DS_Store
+
+# ---------- npm / 前端（web/）----------
+# 不入库：依赖包与构建产物（体积大、可由 package.json 重建）
+# 入  库：package.json · package-lock.json · src/ · 配置 · 启动方法（见 AGENT.md §3）
+node_modules/
+dist/
+.vite/
+*.local
+
+# ---------- 临时产物 ----------
+# temp/ 本身入库（工作痕迹不删），但其中的依赖与日志不入库
+temp/**/node_modules/
+temp/*.log
+temp/*.pid
