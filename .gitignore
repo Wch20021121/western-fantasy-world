@@ -1,10 +1,5 @@
-# 工具缓存
-.agent-browser/
-research/
+# 只忽略工具缓存与系统垃圾；temp/、_archive/、src/ 全部入库
+# 注意：以下规则必须用 / 根锚定，否则会误伤 temp/research/ 等子目录
+/.agent-browser/
+/research/
 .DS_Store
-
-# 拆分前的旧单体备份（已被 16 个专题文件取代，git 历史自会记录）
-_archive/
-
-# 一次性补丁/校验脚本（构建过程产物，不入库）
-*.py
