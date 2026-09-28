@@ -9,16 +9,17 @@
 ## 快速开始
 
 ```bash
-# ① 装依赖（一次性）
-cd web && npm install
+# 【日常】拉代码 + 一键挂载（首跑自动装依赖 → 构建 → 挂 8000）
+git pull && sh run.sh
 
-# ② 开发 · 热更新 → http://127.0.0.1:8000/
-npm run dev
+# 【自测】本地冒烟测试 127.0.0.1:8001，测完自动停，不碰正式服务
+sh test.sh
 
-# ③ 构建 + 对外发布到 8000 端口（回到仓库根目录）
-cd .. && scripts/serve.sh rebuild     # = build + start
-scripts/serve.sh status               # 看是否在跑
-scripts/serve.sh log                  # 看访问日志
+# 【开发】热更新 → http://127.0.0.1:8000/
+cd web && npm install && npm run dev
+
+# 【运维】sh run.sh stop | status | log
+# 【换端口】PORT=9000 sh run.sh   （或直接改 run.sh 里的 PORT=8000）
 
 # 从枢纽文档读起（推荐入口）
 open docs/大纲.md

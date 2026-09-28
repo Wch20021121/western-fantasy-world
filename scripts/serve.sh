@@ -14,7 +14,9 @@
 set -u
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-PORT=8000
+# 端口与绑定地址可用环境变量覆盖（run.sh 就是这么改端口的）
+PORT="${PORT:-8000}"
+BIND="${BIND:-0.0.0.0}"
 DIR="${2:-web/dist}"
 LOG="$ROOT/temp/serve.log"
 PIDFILE="$ROOT/temp/serve.pid"
@@ -30,6 +32,10 @@ running() {
 
 case "${1:-}" in
   build)
+    if [ ! -d "$ROOT/web/node_modules" ]; then
+      echo "▶ 安装 npm 依赖（首次）..."
+      ( cd "$ROOT/web" && npm install ) || { echo "❌ npm install 失败"; exit 1; }
+    fi
     echo "▶ 构建 Vue 工程…"
     ( cd "$ROOT/web" && npm run build ) || { echo "❌ 构建失败"; exit 1; }
     echo "✅ 构建完成 → $ROOT/web/dist"
@@ -44,7 +50,7 @@ case "${1:-}" in
       echo "   先执行：scripts/serve.sh build"
       exit 1
     fi
-    nohup python3 "$ROOT/scripts/serve.py" --port "$PORT" --dir "$DIR" \
+    nohup python3 "$ROOT/scripts/serve.py" --port "$PORT" --bind "$BIND" --dir "$DIR" \
       >> "$LOG" 2>&1 &
     echo $! > "$PIDFILE"
     sleep 1

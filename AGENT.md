@@ -40,6 +40,8 @@
 西幻世界/
 ├── README.md              仓库首页（对外说明）
 ├── AGENT.md               ★ 你正在读的这份
+├── run.sh                 ★★ 一键挂载：`git pull && sh run.sh`（端口在文件内改，或 PORT=xxx 覆盖）
+├── test.sh                ★★ 本地自测：`sh test.sh`（127.0.0.1:8001，测完自动停，不碰正式服务）
 ├── .gitignore
 ├── docs/                  ← 全部 Markdown（18 个，彼此同级）
 │   ├── 大纲.md              ★ 枢纽：全局不变量 / 文件地图 / 阅读路径 / 故事主干
@@ -70,11 +72,15 @@
 
 | 场景 | 命令 |
 |---|---|
-| **装依赖**（一次性） | `cd web && npm install` |
-| **开发 · 热更新** | `cd web && npm run dev` → `http://127.0.0.1:8000/` |
-| **只构建** | `scripts/serve.sh build` → 产出 `web/dist/` |
-| **发布到 8000（对外可访问）** | `scripts/serve.sh rebuild`（= build + start） |
-| **状态 / 日志 / 停止** | `scripts/serve.sh status` · `log` · `stop` |
+| **🚀 一键挂载（日常）** | **`sh run.sh`** —— 首跑自动 `npm install` → `build` → 挂 `0.0.0.0:8000`；可反复执行（自动重启） |
+| **🧪 本地自测** | **`sh test.sh`** —— 在 `127.0.0.1:8001` 起服务跑 7 项冒烟检查，测完自动停；**不碰正式服务**（独立 pid 文件） |
+| **换端口** | `PORT=9000 sh run.sh`（临时）｜或改 `run.sh` 里的 `PORT=8000`（永久）｜或改 `BIND=127.0.0.1` 只留本机 |
+| **停止 / 状态 / 日志** | `sh run.sh stop` · `status` · `log`（底层是 `scripts/serve.sh`，同样支持 `PORT=` 覆盖） |
+| **开发 · 热更新** | `cd web && npm run dev` → `http://127.0.0.1:8000/`（与正式服务**互斥**，都占 8000） |
+| **只构建** | `scripts/serve.sh build` → 产出 `web/dist/`（缺依赖会自动装） |
+
+> ⚠️ **`run.sh` / `test.sh` 放在仓库根目录**，是**用户侧入口**（按约定用 `sh run.sh` 调用），
+> 不入 `scripts/`；底层复用 `scripts/serve.sh` + `scripts/serve.py`，不重复造轮子。
 
 > ⚠️ **开发服务器与静态服务都固定占 8000**，二者**不可同时跑**，换着用先 `stop`。
 > `node_modules/` 与 `dist/` **不入库**（见 `.gitignore`）；入库的是 `package.json` + `package-lock.json` + `src/` + **这份启动方法**。
