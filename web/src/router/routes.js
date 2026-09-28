@@ -52,6 +52,14 @@ export const routes = [
     component: () => import('@/views/GeographyView.vue')
   },
   {
+    /* 区域详情页：一个组件服务 11 个区域（内容见 data/regions.js）。
+       没有 meta.nav —— 子页面不进顶栏导航，由大陆地图点入或上一区/下一区互跳。 */
+    path: '/geography/:slug',
+    name: 'region',
+    meta: { title: '区域详情 · 埃拉西亚大陆' },
+    component: () => import('@/views/RegionView.vue')
+  },
+  {
     path: '/history',
     name: 'history',
     meta: { nav: '战史·时间线', title: '战史与时间线 · 埃拉西亚大陆' },

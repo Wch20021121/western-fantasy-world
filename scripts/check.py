@@ -141,12 +141,20 @@ def scan_routes():
     if n == 0:
         return ['路由表为空']
 
+    # 静态路由（path 不含 ':'）必须进导航；动态路由（如 /geography/:slug）是子页，不进顶栏
+    static_n = len([p for p in r['paths'] if ':' not in p])
+
     # 字段完整性
-    for key, label in [('names', 'name'), ('navs', 'meta.nav'),
-                       ('titles', 'meta.title'), ('comps', 'component')]:
-        if len(r[key]) != n:
-            probs.append('路由 %d 条但只有 %d 个 %s（有条目漏写该字段）'
-                         % (n, len(r[key]), label))
+    for key, label, expect in [('names', 'name', n),
+                               ('titles', 'meta.title', n),
+                               ('comps', 'component', n),
+                               ('navs', 'meta.nav', static_n)]:
+        if len(r[key]) != expect:
+            probs.append(
+                '路由 %d 条（静态 %d）但只有 %d 个 %s —— '
+                '静态路由都要进导航，动态子路由（:slug）不进导航'
+                % (n, static_n, len(r[key]), label)
+            )
 
     # 唯一性
     for key, label in [('paths', 'path'), ('names', 'name')]:
@@ -309,6 +317,41 @@ def scan_canon():
     return probs
 
 
+def scan_map_data():
+    """大陆地图 ↔ 区域详情页 交叉校验：点进去不能 404，版式字段不能缺"""
+    probs = []
+    map_js = os.path.join(WEB, 'src', 'data', 'mapData.js')
+    reg_js = os.path.join(WEB, 'src', 'data', 'regions.js')
+    for p in (map_js, reg_js):
+        if not os.path.exists(p):
+            return ['缺少 %s' % os.path.relpath(p, ROOT)]
+
+    ms = io.open(map_js, encoding='utf-8').read()
+    rs = io.open(reg_js, encoding='utf-8').read()
+
+    map_slugs = set(re.findall(r"slug:\s*'([^']+)'", ms))
+    reg_slugs = set(re.findall(r"slug:\s*'([^']+)'", rs))
+
+    missing = sorted(map_slugs - reg_slugs)
+    if missing:
+        probs.append('地图上的区域没有详情页，点击会 404：%s' % '、'.join(missing))
+    orphan = sorted(reg_slugs - map_slugs)
+    if orphan:
+        probs.append('详情页未在地图上出现，无法从地图点入：%s' % '、'.join(orphan))
+    if not reg_slugs:
+        probs.append('regions.js 里没有任何 slug')
+
+    # RegionView 版式必需的字段，每个区域各一份
+    n = len(reg_slugs)
+    for field in ('slug', 'num', 'en', 'dir', 'ruler', 'waygate', 'tagline',
+                  'sub', 'facts', 'factions', 'hooks'):
+        c = len(re.findall(r'\b%s:' % field, rs))
+        if c != n:
+            probs.append('regions.js 里「%s」出现 %d 次，但有 %d 个区域（字段缺失或重复）'
+                         % (field, c, n))
+    return probs
+
+
 # ─────────────────────────── 输出 ───────────────────────────
 def main():
     total_bad = 0
@@ -340,6 +383,7 @@ def main():
         ('导航组件 SiteNav', scan_nav),
         ('残留旧静态站链接', scan_legacy_links),
         ('.gitignore', scan_gitignore),
+        ('地图 ↔ 区域详情交叉', scan_map_data),
         ('canon 一致性（docs + web）', scan_canon),
     ]
     for label, fn in vue_checks:

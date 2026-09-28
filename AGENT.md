@@ -56,8 +56,11 @@
 │   │   ├── App.vue            根组件（header + SiteNav + router-view）
 │   │   ├── router/routes.js   ★ 路由表 = 全站唯一真值（path / meta.nav / meta.title / 组件）
 │   │   ├── router/index.js    路由实例（hash 模式 · 滚动复位 · 标题同步）
-│   │   ├── components/SiteNav.vue   共享导航（由 routes.js 自动生成）
-│   │   ├── views/*.vue         11 个页面视图（与 docs 专题一一对应）
+│   │   ├── data/mapData.js    ★ 大陆底图数据（11 区形状 / 标注 / 悬浮卡 / 图例）
+│   │   ├── data/regions.js    ★ 区域详情数据（事实 / 势力 / 钩子 / 子地图）
+│   │   ├── lib/svgNodes.js    SVG 节点树 → vnode（底图与子地图共用，别复制第二份）
+│   │   ├── components/        SiteNav · ContinentMap（hover＋点击）· RegionMap
+│   │   ├── views/*.vue         11 个专题视图 ＋ RegionView（一个组件服务 11 个区域页）
 │   │   └── assets/style.css    全站样式（原 site/style.css）
 │   └── dist/                构建产物（★ 不入库，`npm run build` 可重建）
 ├── scripts/               ★ 长期可复用工具（check.py 校验 · serve.sh 启动 · serve.py 服务）
@@ -85,6 +88,9 @@
 > ⚠️ **开发服务器与静态服务都固定占 8000**，二者**不可同时跑**，换着用先 `stop`。
 > `node_modules/` 与 `dist/` **不入库**（见 `.gitignore`）；入库的是 `package.json` + `package-lock.json` + `src/` + **这份启动方法**。
 > **加一个新页面**：只改 `router/routes.js`（加一条 path / meta.nav / meta.title / 组件）＋ 往 `views/` 放一个 `.vue`——导航自动多一项，`check.py` 会校验两边对齐。
+> **加一个新区域**：只改 `data/regions.js`（一条 slug + 事实 + 势力 + 子地图），
+> 并在 `data/mapData.js` 的 `regions` 数组里加一个可点击图形——**不用动 `RegionView` 与路由**。
+> `check.py` 会交叉校验两边 slug 一致（不一致 = 点击 404）。
 
 ---
 
