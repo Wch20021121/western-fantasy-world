@@ -284,10 +284,10 @@
       <div class="stat green"><div class="big">5</div><div class="lbl">当代在位 · 生命/水/土（新任）＋ 龙/风（原班沉睡）</div></div>
       <div class="stat red"><div class="big">4</div><div class="lbl">空悬神位 · 黑暗 / 光明 / 战斗 / 火</div></div>
       <div class="stat"><div class="big">2</div><div class="lbl">那一代活下来的 · 龙神 · 风神</div></div>
-      <div class="stat dark"><div class="big">4</div><div class="lbl">空悬神位 · 黑暗 / 光明 / 战斗 / 火</div></div>
+      <div class="stat dark"><div class="big">7</div><div class="lbl">那一代走到尽头的 · 战死4 · 牺牲1 · 归寂1 · 自碎1</div></div>
     </div>
     <div class="callout">
-      <b>五位沉睡者的伤是同一种伤</b>：蚀主在他们身上留下了<b>本源创伤</b>——不可逆，极难自愈，只能靠长眠压着。<b>这不是清高，是残废。</b>
+      <b>两位沉睡者（龙神与风神）的伤是同一种伤</b>：蚀主在他们身上留下了<b>本源创伤</b>——不可逆，极难自愈，只能靠长眠压着。<b>这不是清高，是残废。</b>
     </div>
 
     <h3 style="color:#7d3fb0">一个几乎所有人都不知道的事</h3>

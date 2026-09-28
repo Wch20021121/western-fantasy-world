@@ -268,6 +268,47 @@ def scan_dist():
     return probs
 
 
+# ───────────────── D. Canon 一致性（已否决的旧口径不得重现）─────────────────
+# 每一条都是 docs/03_神位与徽记.md 已定死的事实，修掉过一次就不许再写回来。
+CANON_FORBIDDEN = [
+    ('三死',            '九神结局旧口径 → 应为：战死4（水土火黑暗）· 牺牲1（生命）· 归寂1（光明）· 自碎1（战斗）'),
+    ('五位沉睡',        '沉睡的只有龙神、风神两位（canon #2：那一代只活两个）'),
+    ('五位被他的伤',    '同上，只有两位沉睡'),
+    ('五位被蚀主',      '同上，只有两位沉睡'),
+    ('5 战死',          '生命是「牺牲」不是战死（docs/03 明写“不是战死”）'),
+    ('九件传世兵器',    '应为「七件」；S 级本源七件、仅三件完整（docs/06 §7.3）'),
+    ('九件兵器',        '同上，“联军九器”已被 docs/06 §7.5 否决'),
+    ('一封印',          '封印的是徽记不是神；结局表里没有“封印”这一项（canon #1）'),
+]
+
+
+def scan_canon():
+    probs = []
+    # 豁免：这两份是**历史存档**，职责就是原文引用“曾经的错误表述”
+    #   16_修订记录  = 变更日志（记录改了什么，必须引旧文才能说清）
+    #   Setting_Audit = 漏洞审计（问题清单，引用的就是漏洞原文）
+    # 其余 docs、README、web/src 都是**面向读者的现行正文**，不许出现旧口径。
+    EXEMPT = {'16_修订记录.md', 'Erathia_Setting_Audit.md'}
+    targets = [p for p in glob.glob(os.path.join(ROOT, 'docs', '*.md'))
+               if os.path.basename(p) not in EXEMPT]
+    targets += [os.path.join(ROOT, 'README.md')]
+    for ext in ('*.vue', '*.js'):
+        targets += glob.glob(os.path.join(WEB, 'src', '**', ext), recursive=True)
+
+    for path in targets:
+        if 'node_modules' in path:
+            continue
+        try:
+            s = io.open(path, encoding='utf-8').read()
+        except (UnicodeDecodeError, OSError):
+            continue
+        for bad, why in CANON_FORBIDDEN:
+            if bad in s:
+                probs.append('%s 出现已否决口径「%s」—— %s'
+                             % (os.path.relpath(path, ROOT), bad, why))
+    return probs
+
+
 # ─────────────────────────── 输出 ───────────────────────────
 def main():
     total_bad = 0
@@ -299,6 +340,7 @@ def main():
         ('导航组件 SiteNav', scan_nav),
         ('残留旧静态站链接', scan_legacy_links),
         ('.gitignore', scan_gitignore),
+        ('canon 一致性（docs + web）', scan_canon),
     ]
     for label, fn in vue_checks:
         p = fn()
