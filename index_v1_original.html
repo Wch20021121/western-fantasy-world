@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>埃拉西亚大陆 · 完整世界观设定</title>
+<style>
+  :root{
+    --bg:#f6f4ef;
+    --panel:#ffffff;
+    --panel2:#fbfaf7;
+    --gold:#b08a3e;
+    --gold-light:#8a6a28;
+    --text:#2b2a30;
+    --dim:#6f6c66;
+    --line:#e3ddd0;
+    --blood:#b0392e;
+    --teal:#2e8f86;
+    --blue:#4f6fb8;
+    --dark-ethers:#7d3fb0;
+    --green:#4a9150;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
+    background:
+      radial-gradient(1200px 600px at 15% -10%, #f1ecdf 0%, transparent 55%),
+      radial-gradient(1000px 500px at 100% 0%, #efece2 0%, transparent 50%),
+      var(--bg);
+    color:var(--text);
+    line-height:1.75;
+    min-height:100vh;
+  }
+  header{
+    position:sticky;top:0;z-index:100;
+    background:rgba(255,255,255,.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .brand{
+    display:flex;align-items:center;justify-content:space-between;
+    max-width:1200px;margin:0 auto;padding:12px 24px;
+  }
+  .brand h1{
+    font-size:22px;letter-spacing:4px;color:var(--gold-light);
+    text-shadow:0 0 20px rgba(201,169,92,.4);
+    font-family:"STKaiti","KaiTi",serif;
+  }
+  .brand small{display:block;font-size:11px;color:var(--dim);letter-spacing:3px;}
+  nav{max-width:1200px;margin:0 auto;display:flex;gap:4px;padding:0 16px 10px;overflow-x:auto;}
+  .tab{
+    flex:1;min-width:86px;text-align:center;padding:8px 10px;
+    color:var(--dim);cursor:pointer;font-size:14px;letter-spacing:2px;
+    border:1px solid transparent;border-radius:8px 8px 0 0;
+    transition:.2s;white-space:nowrap;user-select:none;
+  }
+  .tab:hover{color:var(--gold-light);background:rgba(176,138,62,.08);}
+  .tab.active{
+    color:var(--gold-light);
+    border-color:var(--line);
+    border-bottom-color:transparent;
+    background:linear-gradient(180deg,rgba(201,169,92,.12),rgba(201,169,92,.02));
+    font-weight:600;
+  }
+  .pages{max-width:1200px;margin:0 auto;padding:30px 24px 60px;}
+  .page{display:none;animation:fade .5s ease;}
+  .page.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+  .page-title{
+    font-family:"STKaiti","KaiTi",serif;
+    font-size:38px;letter-spacing:6px;color:var(--gold-light);
+    text-shadow:0 0 30px rgba(201,169,92,.35);
+    padding-bottom:16px;border-bottom:2px solid var(--gold);margin-bottom:28px;
+    display:flex;align-items:baseline;gap:16px;
+  }
+  .page-title .en{font-size:13px;letter-spacing:3px;color:var(--dim);font-family:sans-serif;}
+  .page-title .num{
+    font-size:15px;color:var(--bg);background:var(--gold);border-radius:6px;
+    padding:2px 10px;letter-spacing:1px;font-family:sans-serif;
+  }
+  section{margin-bottom:34px;}
+  h2{
+    font-family:"STKaiti","KaiTi",serif;
+    font-size:22px;color:var(--gold-light);margin-bottom:14px;
+    padding-left:12px;border-left:4px solid var(--gold);letter-spacing:2px;
+  }
+  h3{font-size:16px;color:var(--text);margin:18px 0 8px;letter-spacing:1px;}
+  p{color:var(--text);margin-bottom:10px;}
+  .dim{color:var(--dim);}
+  .grid{display:grid;gap:16px;}
+  .g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr));}
+  .g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));}
+  .card{
+    background:linear-gradient(160deg,var(--panel2),var(--panel));
+    border:1px solid var(--line);border-radius:12px;padding:20px;
+    transition:.25s;position:relative;overflow:hidden;
+  }
+  .card:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 12px 30px rgba(138,106,40,.12);}
+  .card h3{margin-top:0;color:var(--gold-light);font-size:17px;}
+  .card .tag{
+    display:inline-block;font-size:11px;padding:2px 10px;border-radius:20px;
+    background:rgba(176,138,62,.12);color:var(--gold-light);border:1px solid rgba(176,138,62,.4);
+    margin:2px 4px 10px 0;letter-spacing:1px;
+  }
+  .ladder{list-style:none;margin:8px 0;}
+  .ladder li{
+    display:flex;gap:14px;align-items:flex-start;
+    padding:12px 14px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;
+    background:linear-gradient(120deg,var(--panel2),var(--panel));
+  }
+  .ladder .tier{
+    flex:0 0 150px;font-weight:700;letter-spacing:1px;padding-top:2px;
+  }
+  .t0{color:var(--dark-ethers);} .t1{color:var(--gold-light);}
+  .t2{color:var(--teal);} .t3{color:var(--blue);}
+  .stat-row{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0;}
+  .stat{
+    flex:1;min-width:150px;text-align:center;padding:16px 10px;border-radius:12px;
+    border:1px solid var(--line);background:var(--panel);
+  }
+  .stat .big{font-size:30px;font-weight:800;color:var(--gold-light);}
+  .stat.green .big{color:var(--green);} .stat.red .big{color:var(--blood);}
+  .stat .lbl{font-size:12px;color:var(--dim);letter-spacing:1px;margin-top:4px;}
+  .artifact h3{display:flex;align-items:center;gap:8px;}
+  .artifact .icon{
+    width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+    font-size:16px;background:rgba(201,169,92,.12);border:1px solid var(--gold);color:var(--gold-light);flex:0 0 34px;
+  }
+  .timeline{list-style:none;margin:10px 0;border-left:3px solid var(--gold);padding-left:24px;}
+  .timeline li{position:relative;padding:16px 18px;margin-bottom:16px;border-radius:10px;background:var(--panel);border:1px solid var(--line);}
+  .timeline li::before{
+    content:"";position:absolute;left:-31px;top:22px;width:11px;height:11px;border-radius:50%;
+    background:var(--gold);box-shadow:0 0 12px var(--gold);
+  }
+  .timeline .era{font-family:"STKaiti","KaiTi",serif;font-size:20px;color:var(--gold-light);letter-spacing:3px;}
+  .timeline .epoch{font-size:13px;color:var(--dim);letter-spacing:2px;margin-bottom:8px;}
+  .timeline ul.inner{margin:8px 0 0 18px;}
+  .timeline ul.inner li{margin-bottom:8px;padding:0;border:none;background:transparent;position:static;list-style:square;color:var(--text);}
+  .timeline ul.inner li::before{content:none;}
+  #map-wrap{
+    background:linear-gradient(180deg,#e9f0f9,#dfe8f4);
+    border:1px solid var(--line);border-radius:14px;padding:20px;overflow:auto;
+  }
+  #continentMap{width:100%;max-width:900px;display:block;margin:0 auto;}
+  .map-legend{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:16px;}
+  .legend-item{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--dim);}
+  .swatch{width:14px;height:14px;border-radius:4px;display:inline-block;}
+  .region-note{display:grid;gap:10px;margin-top:20px;}
+  .region-note div{font-size:14px;color:var(--text);padding:8px 14px;border-left:3px solid var(--gold);background:rgba(201,169,92,.05);border-radius:0 8px 8px 0;}
+  .region-note b{color:var(--gold-light);}
+  .quote{
+    border:1px solid var(--line);border-left:4px solid var(--blood);
+    background:rgba(176,57,46,.06);padding:16px 20px;border-radius:0 10px 10px 0;
+    color:var(--text);font-style:italic;margin:14px 0;
+  }
+  .quote .src{display:block;margin-top:8px;color:var(--dim);font-style:normal;font-size:13px;}
+  .callout{border:1px solid var(--line);border-left:4px solid var(--gold);background:rgba(201,169,92,.07);padding:16px 20px;border-radius:0 10px 10px 0;margin:14px 0;}
+  .hchain{list-style:none;max-width:900px;margin:10px auto 0;}
+  .hnode{display:flex;gap:18px;align-items:flex-start;background:linear-gradient(120deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:12px;padding:18px 22px;position:relative;}
+  .hnode.key{border:2px solid var(--gold);box-shadow:0 4px 18px rgba(176,138,62,.15);}
+  .hnode.year{position:absolute;top:-12px;right:14px;background:var(--blood);color:#fff;font-size:12px;padding:2px 12px;border-radius:20px;letter-spacing:1px;}
+  .hnum{flex:0 0 46px;height:46px;border-radius:50%;background:var(--gold);color:var(--bg);font-weight:800;font-size:20px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 4px rgba(176,138,62,.18);}
+  .hbody{flex:1;}
+  .hbody h3{margin:0 0 6px;color:var(--gold-light);font-size:19px;font-family:"STKaiti","KaiTi",serif;letter-spacing:1px;}
+  .hbody h3 .badge{font-size:11px;background:var(--blood);color:#fff;padding:1px 9px;border-radius:20px;vertical-align:2px;margin-left:8px;font-family:sans-serif;letter-spacing:1px;}
+  .hbody p{color:var(--text);margin:0;}
+  .annotate{background:rgba(176,138,62,.09);border-left:3px solid var(--gold);padding:12px 16px;border-radius:0 8px 8px 0;margin-top:12px;font-size:14px;color:var(--text);}
+  .annotate .lbl{font-weight:700;color:var(--gold-light);display:block;margin-bottom:5px;letter-spacing:1px;}
+  .harrow{text-align:center;font-size:28px;color:var(--gold);padding:4px 0;line-height:1;font-weight:700;}
+  .fpro{background:linear-gradient(120deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-bottom:22px;}
+  .fpro:hover{border-color:var(--gold);}
+  .fpro .phead{display:flex;align-items:center;gap:14px;margin-bottom:6px;}
+  .fpro .picon{width:52px;height:52px;flex:0 0 52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;background:rgba(176,138,62,.12);border:1.5px solid var(--gold);}
+  .fpro h3{font-family:"STKaiti","KaiTi",serif;font-size:24px;color:var(--gold-light);margin:0;letter-spacing:2px;}
+  .fpro .ptitle{color:var(--dim);font-size:13px;letter-spacing:2px;margin-top:2px;}
+  .fpro .pdesc{color:var(--text);margin:10px 0 6px;padding-left:14px;border-left:3px solid var(--gold);}
+  .fpro table{font-size:13.5px;margin-top:10px;}
+  .fpro table td.k{width:110px;color:var(--gold-light);font-weight:700;background:rgba(176,138,62,.06);white-space:nowrap;}
+  .frel{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+  .frel .rl{font-size:12px;padding:4px 12px;border-radius:20px;border:1px solid var(--line);background:var(--panel);}
+  .frel .rl b{color:var(--gold-light);margin-right:4px;}
+  .frel .rl.hostile{border-color:rgba(176,57,46,.5);background:rgba(176,57,46,.08);}
+  .frel .rl.hostile b{color:var(--blood);}
+  .frel .rl.friendly{border-color:rgba(74,145,80,.5);background:rgba(74,145,80,.08);}
+  .frel .rl.friendly b{color:#3d7a42;}
+  table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14px;}
+  th,td{border:1px solid var(--line);padding:10px 14px;text-align:left;}
+  th{background:var(--panel2);color:var(--gold-light);letter-spacing:1px;white-space:nowrap;}
+  tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .footer{max-width:1200px;margin:0 auto;padding:30px 24px 40px;color:var(--dim);font-size:12px;text-align:center;border-top:1px solid var(--line);letter-spacing:2px;}
+  .pagination{display:flex;justify-content:center;gap:10px;margin-top:30px;}
+  .pagination button{
+    padding:8px 18px;background:var(--panel2);color:var(--text);border:1px solid var(--line);
+    border-radius:8px;cursor:pointer;letter-spacing:1px;transition:.2s;
+  }
+  .pagination button:hover:not(:disabled){border-color:var(--gold);color:var(--gold-light);}
+  .pagination button:disabled{opacity:.35;cursor:not-allowed;}
+  @media(max-width:600px){
+    .page-title{font-size:26px;}
+    .ladder li{flex-direction:column;gap:4px;}
+    .ladder .tier{flex-basis:auto;}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <h1>埃拉西亚大陆<small>ERATHIA · 完整西幻世界观设定</small></h1>
+  </div>
+  <nav id="tabs">
+    <div class="tab active" data-page="bg">1 · 世界本源</div>
+    <div class="tab" data-page="race">2 · 种族</div>
+    <div class="tab" data-page="faction">3 · 势力</div>
+    <div class="tab" data-page="map">4 · 大陆地图</div>
+    <div class="tab" data-page="history">5 · 千年战史</div>
+    <div class="tab" data-page="tl">6 · 时间线</div>
+  </nav>
+</header>
+
+<div class="pages">
+  <!-- 第1页：世界本源 -->
+  <section class="page active" id="bg">
+    <div class="page-title"><span class="num">01</span>世界本源与半神体系<span class="en">WORLD ORIGIN</span></div>
+
+    <section>
+      <h2>黑暗以太 · 一切灾厄的根源</h2>
+      <div class="grid g2">
+        <div class="card">
+          <h3>无魔神体系</h3>
+          <p>本世界<strong>不存在传统人格化魔神</strong>。一切灾难、邪教、畸变、魔物，源头皆为一种可侵蚀万物的存在——</p>
+          <div class="quote">扭曲的黑暗以太粒子。
+            <span class="src">—— 唯一的世界级灾厄之源</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3>黑暗以太 · 核心特性</h3>
+          <ul class="ladder" style="background:none;border:none;padding:0;margin:0;">
+            <li style="display:block;padding:6px 0;border:none;background:none;"><b>侵蚀精神</b>：放大负面情绪、扭曲心智、催生憎恨与毁灭欲</li>
+            <li style="display:block;padding:6px 0;border:none;background:none;"><b>对野兽</b>：强行畸变高阶野兽，提升等级、狂暴嗜杀，最高可催生<span class="t0" style="font-weight:700;">伪半神级畸变巨兽</span></li>
+            <li style="display:block;padding:6px 0;border:none;background:none;"><b>对智慧种族</b>：不会直接变怪物，而是蛊惑心智、催生异教徒与堕落者</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout">
+        <b>泄露来源：</b>太古「千年大寂灭之战」中，半神权柄剧烈碰撞，撕裂了位面壁垒，形成无数空间裂隙。黑暗以太自<strong>异次元虚空</strong>持续渗透现实世界，历经千年仍无法根除。
+      </div>
+    </section>
+
+    <section>
+      <h2>九大本源半神</h2>
+      <p class="dim">四大基础元素：风、火、水、土（雷霆、寒冰、熔岩等皆为其衍生力量）；五大特殊本源：黑暗、光明、巨龙、生命、战斗。<b>已取消雷霆半神，以「战斗半神（斗气之祖）」取而代之</b>，斗气与魔法为两套独立修炼体系。</p>
+      <div class="grid g3">
+        <div class="card artifact"><div class="icon">🕳</div><h3>黑暗</h3><p class="dim">特殊本源 · 本体被封印异次元</p></div>
+        <div class="card artifact"><div class="icon">☀️</div><h3>光明</h3><p class="dim">特殊本源 · 决战燃尽本源战死</p></div>
+        <div class="card artifact"><div class="icon">🐉</div><h3>巨龙</h3><p class="dim">特殊本源 · 存活，常年沉睡</p></div>
+        <div class="card artifact"><div class="icon">🌿</div><h3>生命</h3><p class="dim">特殊本源 · 存活，治愈天花板</p></div>
+        <div class="card artifact"><div class="icon">⚔️</div><h3>战斗</h3><p class="dim">斗气之祖 · 燃尽本源战死</p></div>
+        <div class="card artifact"><div class="icon">🌬</div><h3>风</h3><p class="dim">基础元素 · 大战中陨落</p></div>
+        <div class="card artifact"><div class="icon">🔥</div><h3>火</h3><p class="dim">基础元素 · 沉睡于活火山</p></div>
+        <div class="card artifact"><div class="icon">💧</div><h3>水</h3><p class="dim">基础元素 · 沉睡于深海</p></div>
+        <div class="card artifact"><div class="icon">🗻</div><h3>土</h3><p class="dim">基础元素 · 本源重伤，长眠疗养</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>半神战力梯队</h2>
+      <p class="dim">半神常态差距极小，唯有黑暗半神高出<strong>半阶天堑</strong>，且依靠污染、畸变机制实战极其难缠。</p>
+      <ul class="ladder">
+        <li><span class="tier t0">T0 · 断层级</span><div><b>黑暗半神</b><br><span class="dim">唯一高出所有半神半阶的存在。能力：精神污染、巨兽畸变、情绪掠夺、全域腐蚀。本体被永久封印异次元，仅力量可透过裂隙泄露。</span></div></li>
+        <li><span class="tier t1">T1 · 三巨头</span><div><b>光明半神</b>（决战燃尽本源战死） · <b>太古龙神</b>（存活沉睡） · <b>战斗半神</b>（千年鏖战燃尽斗气本源战死）<br><span class="dim">三者同级持平，战力互角。</span></div></li>
+        <li><span class="tier t2">T2 · 次顶级</span><div><b>生命半神</b><br><span class="dim">存活沉睡，大陆治愈天花板，续航与生机修复顶尖，直接爆发力弱于三巨头。</span></div></li>
+        <li><span class="tier t3">T3 · 四大基础元素</span><div><b>风之半神</b>（大战陨落） · <b>火之半神</b>（沉睡火山） · <b>水之半神</b>（沉睡深海） · <b>土之半神</b>（存活、本源重伤、长眠疗养）<br><span class="dim">四者实力几乎无差，风之半神凭借机动性可险胜其余三者，但无法碾压。</span></div></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>战后半神存活统计</h2>
+      <div class="stat-row">
+        <div class="stat green"><div class="big">5</div><div class="lbl">存活归隐 · 龙神 / 生命 / 火 / 水 / 土</div></div>
+        <div class="stat red"><div class="big">4</div><div class="lbl">战死 / 封印 · 光明 / 战斗 / 风 / 黑暗(囚于异次元)</div></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>九大神器 · 徽记绑定法则</h2>
+      <p class="dim">铁律：<b>徽记碎则神灭、神灭则器崩</b>。每一枚本源徽记，自然孕育一件专属本源神器。</p>
+      <div class="grid g2">
+        <div class="card artifact"><div class="icon">🕳</div><h3>黑暗 · 虚无暗影斗篷</h3><p>随黑暗半神本体一同被封印于异次元虚空，仅余丝丝力量顺着位面裂隙泄露现实。</p></div>
+        <div class="card artifact"><div class="icon">☀️</div><h3>光明 · 破晓圣盾</h3><p>光明半神战死后神器完整留存，供奉于圣光圣庭国圣山宝库。对一切黑暗畸变力量拥有极强净化抗性，对普通生灵杀伤力极弱。</p></div>
+        <div class="card artifact"><div class="icon">🐉</div><h3>巨龙 · 万龙皇牙</h3><p>太古龙神以自身本源龙牙锻造的长枪，封存于北境龙脊雪峰龙祖神殿。可释放本源龙威，但龙族生性高傲，各大龙群并不会无条件听令。</p></div>
+        <div class="card artifact"><div class="icon">⚔️</div><h3>战斗 · 百战战魂铠</h3><p>战斗半神燃尽本源之时，铠甲寸寸崩碎，无数碎片散落大陆各处古战场。每一块碎片都能滋养斗气，是后世战士梦寐以求的至宝；碎片彼此排斥，永远无法复原完整铠甲。</p></div>
+        <div class="card artifact"><div class="icon">🌿</div><h3>生命 · 世界树之枝</h3><p>一截自世界树主干生长出的本源枝条，保管于精灵之森世界树核心。大陆最强治愈圣器，可逆转濒死重伤，但无法起死回生，精灵绝不轻易带出森林。</p></div>
+        <div class="card artifact"><div class="icon">🌬</div><h3>风 · 逐风羽衣</h3><p>风之半神陨落之时，羽衣撕成无数风丝碎片，飘散于全世界高空气流之中，极难寻觅。</p></div>
+        <div class="card artifact"><div class="icon">🔥</div><h3>火 · 焚天熔火宝珠</h3><p>一颗熔岩本源宝珠，沉睡于焚天活火山的岩浆核心之中，整座活火山便是宝珠余温烘烤而成。</p></div>
+        <div class="card artifact"><div class="icon">💧</div><h3>水 · 沧澜潮音珠</h3><p>执掌洋流潮汐，存放于南部大洋深海水晶宫殿。可平息海啸、召唤巨浪。</p></div>
+        <div class="card artifact"><div class="icon">🗻</div><h3>土 · 大地磐石玺</h3><p>土之半神的印玺，藏于灰铁群山地心殿堂，能够安定地脉、平息地震、调动岩土。</p></div>
+      </div>
+    </section>
+  </section>
+
+  <!-- 第2页：种族 -->
+  <section class="page" id="race">
+    <div class="page-title"><span class="num">02</span>六大种族<span class="en">RACES</span></div>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3>人类 <span class="tag">枢纽种族</span></h3>
+        <p>诞生于大陆<b>正中央大平原</b>，四面接壤所有种族。天生擅长交流、通商，兼容<b>魔法与斗气</b>双体系，是世界唯一的「枢纽种族」。</p>
+        <p class="dim">游走于精灵、兽人、矮人、龙族之间，是连接整片大陆的桥梁；也是文明再生与崛起的主角，正迎来旧盛世落幕后的冒险大时代。</p>
+      </div>
+      <div class="card">
+        <h3>精灵族 <span class="tag">生命魔法主宰</span></h3>
+        <p>拥有<b>生命魔法</b>种族天赋，是治愈一系的天然霸主。天性高傲避世，仅通过<b>冒险者公会</b>这一个中立渠道与外界接触。</p>
+        <p class="dim">极度鄙视圣光圣庭——认为圣光只是净化黑暗，并不能代表生命本源。</p>
+      </div>
+      <div class="card">
+        <h3>矮人族 <span class="tag">锻造 / 中立商贸</span></h3>
+        <p>务实、精于<b>锻造</b>的种族，奉行<b>中立贸易</b>原则。铁砧与炉火即是信仰，出产全大陆最好的武器与矿藏。</p>
+        <p class="dim">不与任何阵营深度结盟，只认契约与金币，是最可靠的贸易伙伴。</p>
+      </div>
+      <div class="card">
+        <h3>兽人部落 <span class="tag">蛮荒尚武</span></h3>
+        <p>崇尚力量与勇武的<b>蛮荒部族</b>，<b>无统一政权</b>，各部落自行其是、各自为战。体型强健，是天生的战士与猎人。</p>
+        <p class="dim">对圣光教会完全不信、嗤之以鼻；对抗畸变魔物则以血肉之躯死战。</p>
+      </div>
+      <div class="card">
+        <h3>龙族 <span class="tag">高傲 · 魔武双精通</span></h3>
+        <p><b>极</b>度高傲、族群分散、<b>互不统属</b>的古代强者。天生<b>魔法、斗气双精通</b>，个体战力远超凡俗。</p>
+        <p class="dim">独居东北海外龙岛，与世隔绝；对圣光圣庭厌恶、漠视，对大陆各族事务冷眼旁观。</p>
+      </div>
+      <div class="card">
+        <h3>海裔 <span class="tag">深海守望</span></h3>
+        <p>独居<b>海洋深处</b>的神秘种族，与世无争，远离大陆一切纷争。守护着沧澜潮音珠与沉眠的水之半神。</p>
+        <p class="dim">分为深海海裔与近海海裔；近海海裔多定居海岛，部分会进入大陆成为冒险者。</p>
+      </div>
+    </div>
+
+    <section>
+      <h2>双魔法体系 · 严格区分</h2>
+      <div class="grid g2">
+        <div class="card">
+          <h3>🌿 生命魔法 <span class="tag">真正的治愈</span></h3>
+          <ul>
+            <li>核心能力：修复肉身、续接筋骨、修复脏腑、逆转重伤</li>
+            <li>种族差异：精灵天生海量掌握；人类及其他种族<b>天赋万中无一、极度稀缺</b></li>
+            <li>定位：纯治愈、滋养、生机；对黑暗畸变无特攻效果</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>☀️ 圣光魔法 <span class="tag">黑暗特攻</span></h3>
+          <ul>
+            <li>核心能力：对黑暗、畸变、腐化<b>百分百特攻</b>，净化能力极强</li>
+            <li>短板：治愈能力极弱，只能清除毒素、净化腐化，<b>无法修复重伤肉身</b></li>
+            <li>掌握者：圣光圣庭国教会体系</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout">
+        <b>生命知识公开，但天赋垄断。</b>冒险者公会为保全人类存续，选择<b>全大陆公开生命魔法入门典籍</b>。然而「知识免费、天赋垄断」——99% 的人终生无法引动生命魔力，高阶秘法依旧由公会内部垄断。
+      </div>
+    </section>
+
+    <section>
+      <h2>斗气体系 · 起源于战死的半神</h2>
+      <div class="card">
+        <p>世间斗气的源头，来自三千年前战死的<b>战斗半神</b>。其百战战魂铠崩碎之后，无数碎片散落在古战场与大陆各地，碎片中逸散的斗气本源，滋养了后世凡俗的斗气修炼之路。</p>
+        <p class="dim">人类、兽人、龙族皆可修炼斗气；其中兽人肉身契合度最高，龙族天生魔武双通，人类依靠战魂碎片传承与刻苦修炼迎头赶上。</p>
+      </div>
+    </section>
+  </section>
+
+  <!-- 第3页：势力 -->
+  <section class="page" id="faction">
+    <div class="page-title"><span class="num">03</span>各大势力<span class="en">FACTIONS</span></div>
+
+    <div class="fpro">
+      <div class="phead"><div class="picon">☀️</div><div>
+        <h3>圣光圣庭国</h3>
+        <div class="ptitle">圣山北境 · 信仰之国 · 高度孤立</div>
+      </div></div>
+      <p class="pdesc">以圣光立国、守候<b>光明徽记与破晓圣盾</b>复苏的神权帝国。拥有对黑暗与畸变<b>百分百特攻</b>的圣光魔法，本应是抗击黑暗的最强之盾，却因教义的傲慢与排他，沦为大陆上<b>没有真正盟友的孤家寡人</b>。</p>
+      <table>
+        <tr><td class="k">所在地</td><td>主大陆北部圣山一带，破晓圣盾供奉于此</td></tr>
+        <tr><td class="k">政权形态</td><td>神权教国，教会与国家一体</td></tr>
+        <tr><td class="k">信仰宗旨</td><td>侍奉光明本源、守候徽记复苏、肃清一切黑暗腐化</td></tr>
+        <tr><td class="k">核心力量</td><td>光明半神遗留的圣光传承，对黑暗畸变百分百特攻</td></tr>
+        <tr><td class="k">天然短板</td><td>治愈能力极弱，只能清毒素净腐化，无法修复重伤肉身</td></tr>
+        <tr><td class="k">内部派系</td><td>守序温和派（务实抗灾） / 狂热十字军派（主张圣战净化）</td></tr>
+      </table>
+      <div class="frel">
+        <span class="rl hostile"><b>精灵</b>极度鄙视</span>
+        <span class="rl hostile"><b>兽人</b>嗤之以鼻</span>
+        <span class="rl hostile"><b>龙族/海裔</b>厌恶漠视</span>
+        <span class="rl"><b>人类</b>半合作半提防</span>
+      </div>
+    </div>
+
+    <div class="fpro">
+      <div class="phead"><div class="picon">⚔️</div><div>
+        <h3>冒险者公会</h3>
+        <div class="ptitle">全大陆 · 中枢平台 · 枢纽中的枢纽</div>
+      </div></div>
+      <p class="pdesc">独自支撑起整片大陆交流与冒险的中立组织：统一<b>魔物悬赏、任务发布与治疗体系</b>，是各族冒险者、散修、雇佣兵唯一的公共交汇平台。</p>
+      <table>
+        <tr><td class="k">总部</td><td>大陆中央誓约之地，分支机构遍及全陆</td></tr>
+        <tr><td class="k">核心宗旨</td><td>引导冒险、统合魔物威胁、保全文明存续、挖掘上古遗珍</td></tr>
+        <tr><td class="k">生命体系</td><td>精灵法师常驻 + 大陆搜寻生命天赋少年集中培养；垄断高阶生命秘法</td></tr>
+        <tr><td class="k">公开政策</td><td>生命魔法入门典籍全大陆公开——「知识免费、天赋垄断」</td></tr>
+        <tr><td class="k">治疗规则</td><td>治疗资源与任务等级绑定；低级冒险团无配套生命治疗；高危任务可申请随行法师</td></tr>
+        <tr><td class="k">民间生态</td><td>大量民间独立生命法师炼制低阶生命药剂流通市面；部分民间天才水平反超公会，公会无法完全掌控</td></tr>
+      </table>
+    </div>
+
+    <div class="fpro">
+      <div class="phead"><div class="picon">🌿</div><div>
+        <h3>精灵族</h3>
+        <div class="ptitle">主大陆东部圣林 · 唯一真治愈</div>
+      </div></div>
+      <p class="pdesc">掌握<b>生命魔法</b>的古老种族，治愈一系的天然霸主，守护<b>世界树之枝</b>（现世最强治愈圣器）。天性高傲避世，极少与外界往来。</p>
+      <table>
+        <tr><td class="k">所在地</td><td>主大陆东部精灵圣林，世界树之枝生长于此</td></tr>
+        <tr><td class="k">种族天赋</td><td>生命魔法天生海量掌握；其他种族生命天赋万中无一</td></tr>
+        <tr><td class="k">对外模式</td><td>不直接和世俗政权打交道，仅通过冒险者公会与外界有限接触</td></tr>
+        <tr><td class="k">对教会立场</td><td>极度鄙视圣光——认为圣光只是净化黑暗，不配代表生命本源</td></tr>
+      </table>
+      <div class="frel">
+        <span class="rl hostile"><b>圣光教会</b>极度鄙视</span>
+        <span class="rl friendly"><b>冒险者公会</b>深度合作</span>
+        <span class="rl"><b>人类/矮人</b>若即若离</span>
+      </div>
+    </div>
+
+    <div class="fpro">
+      <div class="phead"><div class="picon">🔨</div><div>
+        <h3>矮人族</h3>
+        <div class="ptitle">主大陆西北锻造山脉 · 务实中立</div>
+      </div></div>
+      <p class="pdesc">务实的锻造民族，出产全大陆最好的武器与矿藏，奉行<b>中立贸易</b>原则——不结盟、不站队，只认铁砧、契约与金币。</p>
+      <table>
+        <tr><td class="k">所在地</td><td>主大陆西北灰铁群山，地心殿堂封存大地磐石玺</td></tr>
+        <tr><td class="k">信奉</td><td>炉火与铁砧即信仰，技艺至上</td></tr>
+        <tr><td class="k">立场</td><td>绝对中立，向所有种族公平贸易，唯利是图但重契约</td></tr>
+        <tr><td class="k">核心优势</td><td>大陆顶级锻造工艺 · 富饶矿脉 · 大地磐石玺安定地脉</td></tr>
+      </table>
+      <div class="frel">
+        <span class="rl friendly"><b>人类</b>稳定贸易</span>
+        <span class="rl friendly"><b>冒险者公会</b>军械供应</span>
+        <span class="rl"><b>圣光/精灵/兽人</b>等值交易</span>
+      </div>
+    </div>
+
+    <div class="fpro">
+      <div class="phead"><div class="picon">🦴</div><div>
+        <h3>兽人诸部</h3>
+        <div class="ptitle">主大陆西南荒原 · 蛮荒尚武</div>
+      </div></div>
+      <p class="pdesc">崇尚力量与勇武的蛮荒部族，<b>无统一政权</b>，各部落自行其是、各自为战。体型强健，是天生的战士与猎人。</p>
+      <table>
+        <tr><td class="k">所在地</td><td>主大陆西南兽人荒原</td></tr>
+        <tr><td class="k">政权形态</td><td>无数独立部落，无统一首领，依强者威望聚散</td></tr>
+        <tr><td class="k">信仰</td><td>尊崇力量与战功，信奉部落图腾与先祖</td></tr>
+        <tr><td class="k">对教会立场</td><td>完全不信、嗤之以鼻；对抗畸变则以血肉死战</td></tr>
+      </table>
+      <div class="frel">
+        <span class="rl hostile"><b>圣光教会</b>嗤之以鼻</span>
+        <span class="rl"><b>人类</b>偶有摩擦亦并肩抗敌</span>
+        <span class="rl"><b>矮人</b>以皮毛换兵刃</span>
+      </div>
+    </div>
+
+    <div class="fpro">
+      <div class="phead"><div class="picon">🐉</div><div>
+        <h3>龙族</h3>
+        <div class="ptitle">东北龙岛 · 高傲孤傲 · 独居海外</div>
+      </div></div>
+      <p class="pdesc">天生<b>魔法、斗气双精通</b>的古代强者，因极度高傲而<b>独居东北海外孤岛</b>，与世隔绝。族群分散、<b>互不统属</b>，即便同族亦各自为王。</p>
+      <table>
+        <tr><td class="k">所在地</td><td>东北龙岛，龙祖神殿封存万龙皇牙</td></tr>
+        <tr><td class="k">性格</td><td>极度高傲，厌恶成群结党，目空一切</td></tr>
+        <tr><td class="k">立场</td><td>对圣光圣庭厌恶、漠视；对大陆各族事务冷眼旁观</td></tr>
+      </table>
+      <div class="frel">
+        <span class="rl hostile"><b>圣光教会</b>厌恶漠视</span>
+        <span class="rl"><b>全大陆</b>高傲疏离</span>
+      </div>
+    </div>
+
+    <div class="fpro" style="border-color:rgba(125,63,176,.5)">
+      <div class="phead"><div class="picon">🕳️</div><div>
+        <h3>堕落半岛 · 黑暗侧</h3>
+        <div class="ptitle">西南独立板块 · 世界公敌 · 黑暗回潮</div>
+      </div></div>
+      <p class="pdesc">黑暗半神遗留的根据地，也是如今一切黑暗力量的大本营。本体虽被封于异次元，其势力却透过<b>黑暗裂隙与松动封印</b>持续滋长——邪教复苏、畸变魔物成群、异教徒横行。</p>
+      <table>
+        <tr><td class="k">所在地</td><td>西南堕落半岛，中央黑暗巨洞，遍地迷宫密室遗迹</td></tr>
+        <tr><td class="k">构成</td><td>邪教徒 · 堕落者 · 异教徒 · 畸变兽潮 · 伪半神巨兽</td></tr>
+        <tr><td class="k">终极目标</td><td>破解封印、迎回黑暗本体、彻底毁灭旧世界</td></tr>
+        <tr><td class="k">核心伏笔</td><td>封存无数太古锻造工艺、药剂配方、上古兵器与修炼秘宝——既是威胁，也是后世冒险者的宝库</td></tr>
+      </table>
+      <div class="frel">
+        <span class="rl hostile"><b>全大陆</b>公敌</span>
+        <span class="rl"><b>封印</b>随岁月持续松动</span>
+      </div>
+    </div>
+
+    <div class="callout">
+      <b>总体格局：</b>主大陆上，<b>冒险者公会</b>是唯一公共枢纽，<b>人类</b>居中撑起整个舞台，<b>精灵</b>握治愈、<b>矮人</b>供军械、<b>兽人</b>出战士，共同面对西南<b>堕落半岛</b>的黑暗；<b>上古战场</b>横亘两者之间充当前沿屏障；而<b>圣光圣庭</b>因傲慢自我孤立，<b>龙族</b>居高冷眼、<b>海裔</b>深潜不问——大陆的合纵连横，正由此展开。
+    </div>
+  </section>
+
+  <!-- 第4页：大陆地图 -->
+  <section class="page" id="map">
+    <div class="page-title"><span class="num">04</span>大陆地图<span class="en">MAP OF ERATHIA</span></div>
+
+    <div id="map-wrap">
+      <svg id="continentMap" viewBox="0 0 1000 700" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="ocean" cx="50%" cy="42%" r="78%">
+            <stop offset="0%" stop-color="#bfe0f2"/>
+            <stop offset="100%" stop-color="#a5ceed"/>
+          </radialGradient>
+          <radialGradient id="darkHole" cx="50%" cy="45%" r="60%">
+            <stop offset="0%" stop-color="#b08ad0"/>
+            <stop offset="60%" stop-color="#906cc0"/>
+            <stop offset="100%" stop-color="#7d5aa0"/>
+          </radialGradient>
+          <linearGradient id="inlet" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#c2e2f4"/>
+            <stop offset="100%" stop-color="#a9d4ee"/>
+          </linearGradient>
+          <filter id="glow"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+
+        <rect x="0" y="0" width="1000" height="700" fill="url(#ocean)"/>
+
+        <path d="M100,140 C150,70 340,50 490,60 C620,70 720,90 750,150
+                 C780,215 760,310 735,390 C710,460 650,530 570,545
+                 C470,563 395,530 330,488 C260,442 215,532 158,525
+                 C98,518 62,448 60,355 C58,265 65,188 100,140 Z"
+              fill="#d5e6c9" stroke="#8fae7c" stroke-width="2"/>
+
+        <path d="M730,420 C680,382 595,362 530,395 C480,420 490,465 538,495
+                 C595,532 675,518 735,475 C770,450 765,440 730,420 Z"
+              fill="url(#inlet)" stroke="#7fb6d6" stroke-width="1.5"/>
+        <text x="610" y="460" fill="#2b5f8a" font-size="12" font-family="serif" text-anchor="middle">内海 · 直抵中央</text>
+
+        <g fill="#b9a97e">
+          <polygon points="200,175 245,145 288,178"/>
+          <polygon points="250,205 290,175 335,212"/>
+          <polygon points="170,220 200,195 235,228"/>
+        </g>
+        <text x="275" y="165" fill="#4a3f2a" font-size="14" font-weight="bold" text-anchor="middle" font-family="serif">灰铁群山</text>
+        <text x="275" y="183" fill="#6a5a38" font-size="9" text-anchor="middle">矮人锻造圣地</text>
+        <circle cx="275" cy="230" r="5" fill="#b08a3e" stroke="#7a5c20" stroke-width="1"/>
+        <text x="275" y="248" fill="#7a5c20" font-size="9" text-anchor="middle">地心殿堂·大地磐石玺</text>
+
+        <ellipse cx="620" cy="242" rx="72" ry="52" fill="#c2e0b2" stroke="#7db36a" stroke-width="1.5"/>
+        <text x="620" y="238" fill="#225a2a" font-size="14" font-weight="bold" text-anchor="middle" font-family="serif">精灵圣林</text>
+        <text x="620" y="256" fill="#48753a" font-size="9" text-anchor="middle">世界树之枝</text>
+
+        <text x="265" y="442" fill="#4a3a24" font-size="13" font-weight="bold" text-anchor="middle" font-family="serif">兽人诸部荒原</text>
+        <text x="265" y="460" fill="#6a5533" font-size="9" text-anchor="middle">蛮荒尚武 · 无统一政权</text>
+
+        <path d="M450,110 L480,78 L510,110 L495,108 L510,132 L450,132 L465,108 Z" fill="#a8a87e" stroke="#8a8a6a" stroke-width="1"/>
+        <text x="480" y="70" fill="#5a5a3a" font-size="11" font-weight="bold" text-anchor="middle" font-family="serif">圣山 · 破晓圣盾</text>
+
+        <ellipse cx="445" cy="320" rx="76" ry="52" fill="#eef2c8" stroke="#aab45f" stroke-width="1.5"/>
+        <text x="445" y="316" fill="#4a4a2a" font-size="16" font-weight="bold" text-anchor="middle" font-family="serif">人类中央平原</text>
+        <text x="445" y="334" fill="#6a7038" font-size="10" text-anchor="middle">文明发源地 · 大陆枢纽</text>
+
+        <circle cx="520" cy="290" r="16" fill="none" stroke="#b08a3e" stroke-width="2" stroke-dasharray="4 3"/>
+        <circle cx="520" cy="290" r="5" fill="#b08a3e"/>
+        <text x="540" y="293" fill="#7a5c20" font-size="9" font-family="serif">★誓约之地(中立)</text>
+
+        <path d="M100,562 C76,598 110,652 182,664 C265,678 332,645 348,588
+                 C358,540 310,530 258,548 C198,568 132,542 100,562 Z"
+              fill="url(#darkHole)" stroke="#7d5bb8" stroke-width="2.5" filter="url(#glow)"/>
+        <text x="250" y="605" fill="#4a2a6b" font-size="14" font-weight="bold" text-anchor="middle" font-family="serif">堕落半岛</text>
+        <text x="250" y="623" fill="#5a3a7a" font-size="9" text-anchor="middle">黑暗巨洞 · 以太外泄</text>
+        <circle cx="160" cy="625" r="17" fill="none" stroke="#3a1a55" stroke-width="3" stroke-dasharray="5 3"/>
+        <text x="160" y="621" fill="#3a1a55" font-size="7" text-anchor="middle">黑暗</text>
+        <text x="160" y="632" fill="#3a1a55" font-size="7" text-anchor="middle">巨洞</text>
+
+        <ellipse cx="378" cy="570" rx="68" ry="46" fill="#d8bca0" stroke="#a98058" stroke-width="2"/>
+        <path d="M348,560 L370,542 L392,560 M380,590 L402,575 L418,592" stroke="#7a4a2a" stroke-width="2" fill="none" opacity=".6"/>
+        <text x="378" y="565" fill="#5a3018" font-size="13" font-weight="bold" text-anchor="middle" font-family="serif">上古战场</text>
+        <text x="378" y="581" fill="#7a4a2a" font-size="9" text-anchor="middle">百战战魂铠碎片散落</text>
+
+        <ellipse cx="868" cy="132" rx="66" ry="54" fill="#ded0da" stroke="#9a7f8d" stroke-width="2"/>
+        <path d="M840,120 L868,98 L898,122 L886,150 L852,150 Z" fill="#cbb6c4"/>
+        <text x="868" y="120" fill="#4a3140" font-size="14" font-weight="bold" text-anchor="middle" font-family="serif">龙族龙岛</text>
+        <text x="868" y="137" fill="#6a4a5a" font-size="9" text-anchor="middle">高傲独居 · 与世隔绝</text>
+        <text x="868" y="153" fill="#7a5a6a" font-size="8" text-anchor="middle">龙祖神殿 · 万龙皇牙</text>
+
+        <polygon points="962,550 992,518 1022,550" fill="#c97d55" stroke="#9a4a30" stroke-width="1"/>
+        <text x="992" y="512" fill="#6a301a" font-size="9" text-anchor="middle" font-family="serif">焚天活火山</text>
+        <text x="992" y="526" fill="#8a4a2a" font-size="8" text-anchor="middle">焚天熔火宝珠</text>
+
+        <text x="560" y="652" fill="#3a6a8a" font-size="10" font-family="serif" text-anchor="middle">◈ 深海宫殿 · 沧澜潮音珠 ◈</text>
+        <text x="560" y="670" fill="#5a80a0" font-size="8" text-anchor="middle">海裔 · 水之半神沉眠(海水之下)</text>
+
+        <g stroke="#2b5f8a" stroke-width="1.8" stroke-dasharray="7 6" fill="none" opacity=".8">
+          <path d="M440,70 C380,120 480,110 480,190"/>
+          <path d="M340,140 C425,200 460,220 445,274"/>
+          <path d="M640,290 C570,290 530,280 520,290"/>
+          <path d="M345,420 C390,390 440,360 480,330"/>
+          <path d="M330,290 C710,220 770,190 810,170"/>
+          <path d="M360,550 C355,590 260,600 250,602"/>
+        </g>
+
+        <g transform="translate(103,50)" font-size="11" fill="#2b5f8a" font-family="serif" text-anchor="middle">
+          <circle r="28" fill="rgba(255,255,255,.5)" stroke="#2b5f8a" stroke-width="2"/>
+          <path d="M0,-22 L4,0 L0,22 L-4,0 Z" fill="#b0392e"/>
+          <path d="M22,0 L0,4 L-22,0 L0,-4 Z" fill="#2b5f8a"/>
+          <text x="0" y="-31">N</text><text x="0" y="42">S</text>
+          <text x="36" y="3">E</text><text x="-36" y="3">W</text>
+        </g>
+      </svg>
+
+      <div class="map-legend">
+        <div class="legend-item"><span class="swatch" style="background:#d5e6c9"></span>主大陆（人/精/兽/矮）</div>
+        <div class="legend-item"><span class="swatch" style="background:#eef2c8"></span>人类中央平原</div>
+        <div class="legend-item"><span class="swatch" style="background:#9672b8"></span>堕落半岛（黑暗）</div>
+        <div class="legend-item"><span class="swatch" style="background:#d8bca0"></span>上古战场</div>
+        <div class="legend-item"><span class="swatch" style="background:#ded0da"></span>龙族龙岛（孤岛）</div>
+        <div class="legend-item"><span class="swatch" style="background:#c2e2f4"></span>内海（深入陆地）</div>
+        <div class="legend-item"><span class="swatch" style="background:#b08a3e"></span>誓约之地（中立）</div>
+        <div class="legend-item"><span class="swatch" style="background:#2b5f8a"></span>主要航路</div>
+      </div>
+    </div>
+
+    <section style="margin-top:24px;">
+      <h2>地理格局导读</h2>
+      <p class="dim">世界由一片<b>主大陆</b>、一座<b>西南独立半岛</b>、一座<b>东北龙岛</b>与环绕四周的无尽大洋构成；内海从东南海岸直插大陆腹地，让中央平原同时拥有陆地枢纽与深水良港的双重身份。</p>
+      <div class="region-note">
+        <div><b>① 主大陆中心 · 人类</b> — 人类诞生并崛起于中央大平原，四面接壤所有种族，天然成为大陆的沟通枢纽。</div>
+        <div><b>② 西北 · 矮人灰铁群山</b> — 锻造山脉铸就最好的兵刃与矿藏，中立商贸；地心殿堂封存大地磐石玺，土之半神长眠于此疗养。</div>
+        <div><b>③ 东部 · 精灵圣林</b> — 生命魔法之源，世界树之枝的守护地；高傲避世，仅通过冒险者公会与外界有限往来。</div>
+        <div><b>④ 西南 · 兽人诸部荒原</b> — 蛮荒部落林立，无统一政权，尚武而分散。荒原西侧矗立焚天活火山，火之半神沉眠于岩浆核心。</div>
+        <div><b>⑤ 北部 · 圣山与圣光圣庭</b> — 光明半神陨落之地，破晓圣盾供奉于此；圣光教会立国，因教义傲慢而自我孤立。</div>
+        <div><b>⑥ 西南外海 · 堕落半岛</b> — 黑暗半神的千年根据地，黑暗巨洞持续外泄以太；与主大陆隔海相望，是一切灾厄的源头。</div>
+        <div><b>⑦ 中央海峡 · 上古战场</b> — 千年大战的最前线，恰好横亘在黑暗与主陆之间的海路要冲，是抵御黑暗入侵的头道屏障；百战战魂铠碎片散落于此。</div>
+        <div><b>⑧ 东北孤岛 · 龙族龙岛</b> — 龙族因高傲而独居海外，与世隔绝；龙祖神殿与万龙皇牙坐落于此，不与任何势力同陆。</div>
+        <div><b>⑨ 南部深海 · 海裔</b> — 深海宫殿与沧澜潮音珠位于未知海深，水之半神沉眠于此，与世无争。</div>
+      </div>
+    </section>
+  </section>
+
+  <!-- 第5页：千年战史 -->
+  <section class="page" id="history">
+    <div class="page-title"><span class="num">05</span>千年大寂灭之战<span class="en">THE GREAT EXTINCTION WAR</span></div>
+
+    <div class="hchain">
+      <div class="hnode key">
+        <span class="year">太古盛世</span>
+        <div class="hnum">1</div>
+        <div class="hbody">
+          <h3>太古黄金时代 · 文明巅峰 <span class="badge">关键节点</span></h3>
+          <p>在黑暗降临之前，世界曾有过一段璀璨至极的黄金时代——文明、锻造、药剂、符文、魔法全部达到历史最高点。</p>
+          <div class="annotate"><span class="lbl">◆ 细节</span>九大本源半神各司其职，四海承平、万物繁盛。这一时期的「太古遗存」正是后世一切机缘与冒险的源泉。所谓太古秘宝、失传图纸、上古兵器，皆出自此时。</div>
+        </div>
+      </div>
+      <div class="harrow">↓</div>
+      <div class="hnode key">
+        <div class="hnum">2</div>
+        <div class="hbody">
+          <h3>人类强者寻获黑暗徽记 <span class="badge">关键节点</span></h3>
+          <p>一名人类强者在<b>西南堕落半岛</b>的远古遗迹中，觅得了被掩埋的黑暗徽记，自此踏上黑暗半神之路。</p>
+          <div class="annotate"><span class="lbl">◆ 细节</span>他最初是怀着「救世」的抱负而寻获此物，却不知黑暗以太早已悄然侵入其心智。徽记与本源半神之位，是他堕落的起点，也是整段悲剧的开端。</div>
+        </div>
+      </div>
+      <div class="harrow">↓</div>
+      <div class="hnode key">
+        <div class="hnum">3</div>
+        <div class="hbody">
+          <h3>理念扭曲 · 从救世到灭世 <span class="badge">关键节点</span></h3>
+          <p>被黑暗以太彻底扭曲后，他认定——「旧世界必须彻底毁灭，苦难才能归零」。</p>
+          <div class="annotate"><span class="lbl">◆ 细节</span>这是全篇世界的核心悲剧支点：一位曾经的救世者，反被自身所追寻的力量吞噬，成为整个大陆千年浩劫的始作俑者。</div>
+        </div>
+      </div>
+      <div class="harrow">↓</div>
+      <div class="hnode key">
+        <div class="hnum">4</div>
+        <div class="hbody">
+          <h3>堕落半岛崛起为黑暗根基 <span class="badge">关键节点</span></h3>
+          <p>黑暗半神以西南<b>堕落半岛</b>为绝对大本营，疯狂扩充兵力，建造无尽工事。</p>
+          <div class="annotate"><span class="lbl">◆ 细节</span>在此孵化、畸变高阶野兽，<b>批量制造伪半神巨兽</b>；修建太古黑暗迷宫、虚空节点、封印密室、战争工事；内部封存无数太古药剂、失传图纸、上古兵器与修炼秘宝。</div>
+        </div>
+      </div>
+      <div class="harrow">↓</div>
+      <div class="hnode">
+        <div class="hnum">5</div>
+        <div class="hbody">
+          <h3>千年拉锯战拉开序幕</h3>
+          <p>大陆联军与黑暗畸变大军展开<b>绵延近千年的拉锯</b>，位面壁垒在战火中被不断撕裂，无数空间裂隙应运而生。</p>
+        </div>
+      </div>
+      <div class="harrow">↓</div>
+      <div class="hnode key">
+        <div class="hnum">6</div>
+        <div class="hbody">
+          <h3>战斗半神燃尽本源 · 形神俱灭 <span class="badge">关键节点</span></h3>
+          <p>率领凡俗<b>斗气军团</b>正面死磕无尽畸变大军，千年血战至最后一刻。</p>
+          <div class="annotate"><span class="lbl">◆ 细节</span>他以燃尽斗气本源为代价，死死拖住数十头伪半神巨兽，最终形神俱灭。其<b>百战战魂铠</b>随之崩碎，碎片散落古战场，却意外滋养了后世的斗气传承——人类武道的起源，实为一位战死半神的遗赠。</div>
+        </div>
+      </div>
+      <div class="harrow">↓</div>
+      <div class="hnode">
+        <div class="hnum">7</div>
+        <div class="hbody">
+          <h3>风之半神 · 东境陨落</h3>
+          <p>东部战场上，风之半神遭黑暗大军优势兵力围杀，力竭陨落。</p>
+          <p class="dim">其神器逐风羽衣碎裂飘散天地，从此极难寻觅。</p>
+        </div>
+      </div>
+      <div class="harrow">↓</div>
+      <div class="hnode key">
+        <div class="hnum">8</div>
+        <div class="hbody">
+          <h3>半数半神陨落 · 黑暗被逐步合围 <span class="badge">关键节点</span></h3>
+          <p>联军付出<b>半数半神陨落的惨烈代价</b>，终于将黑暗势力步步紧逼，打回堕落半岛原点。</p>
+          <div class="annotate"><span class="lbl">◆ 细节</span>战至此刻，九大本源半神已折损战斗、风两位，加上黑暗自身被围，陨落近半。这场浩劫的惨痛，深深地刻入每个种族的记忆里。</div>
+        </div>
+      </div>
+      <div class="harrow">↓</div>
+      <div class="hnode key">
+        <div class="hnum">9</div>
+        <div class="hbody">
+          <h3>终局决战 · 黑暗巨洞现世 <span class="badge">关键节点</span></h3>
+          <p>联军兵临半岛中心，光明半神燃烧<b>全部生命本源</b>，打出极限一击，重创黑暗半神本体。</p>
+          <div class="annotate"><span class="lbl">◆ 细节</span>半岛中心被轰出<b>永不愈合的黑暗巨洞</b>——这是世界最大的裂隙源头，也是黑暗以太至今持续外泄的根源，终局战后仍无法根除。</div>
+        </div>
+      </div>
+      <div class="harrow">↓</div>
+      <div class="hnode key">
+        <div class="hnum">10</div>
+        <div class="hbody">
+          <h3>封印黑暗 · 打入异次元虚空 <span class="badge">关键节点</span></h3>
+          <p>剩余五位半神联手，将黑暗半神、黑暗徽记与虚无暗影斗篷<b>全部打入异次元封印</b>。</p>
+          <div class="annotate"><span class="lbl">◆ 细节</span>黑暗半神本体自此无法现世，唯余力量可透过裂隙泄露。然而海量迷宫、节点、密室<b>来不及全部摧毁，只能封印封存</b>——这些都将成为后世冒险者的探索之地。</div>
+        </div>
+      </div>
+      <div class="harrow">↓</div>
+      <div class="hnode">
+        <div class="hnum">11</div>
+        <div class="hbody">
+          <h3>战后遗留 · 无法根治的黑暗</h3>
+          <p>黑暗巨洞只能以<b>多层半神符文压制</b>，持续泄露以太；封印随岁月不断松动，周期性爆发魔物灾变与机缘现世。</p>
+        </div>
+      </div>
+      <div class="harrow">↓</div>
+      <div class="hnode key">
+        <div class="hnum">12</div>
+        <div class="hbody">
+          <h3>上古共约 · 誓约之巅立约 <span class="badge">关键节点</span></h3>
+          <p>五位幸存半神在大陆中心誓约之巅立下铁律，此后全部归隐沉睡，不再干预凡俗。</p>
+          <div class="annotate"><span class="lbl">◆ 三条铁律</span>① 半神禁止直接动用本源屠戮凡俗、操控王朝战争；② 大陆中央誓约之地永久中立，为各族唯一交流缓冲带；③ 若位面壁垒崩溃，所有半神必须全员苏醒救世。</div>
+        </div>
+      </div>
+      <div class="harrow">↓</div>
+      <div class="hnode key">
+        <div class="hnum">13</div>
+        <div class="hbody">
+          <h3>誓约纪元 · 冒险大时代启幕 <span class="badge">关键节点</span></h3>
+          <p>战后文明重建，人类城邦联盟成型；圣光教会立国守候光明徽记复苏；冒险者公会统一魔物、任务与治疗体系。</p>
+          <div class="annotate"><span class="lbl">◆ 当代</span>当前时代正处于「旧盛世落幕、黑暗回潮、太古秘宝现世」的转折点上——裂隙松动、以太加剧、邪教复苏、遗迹解封。<b>故事，从这里开始。</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 第6页：时间线 -->
+  <section class="page" id="tl">
+    <div class="page-title"><span class="num">06</span>完整时间线<span class="en">TIMELINE</span></div>
+
+    <ol class="timeline">
+      <li>
+        <div class="era">太古纪元</div>
+        <div class="epoch">盛世期 · 文明巅峰</div>
+        <ul class="inner">
+          <li>工艺、锻造、符文、药剂、魔法全部达到<b>历史最高点</b>。</li>
+          <li>九大本源半神各司其职，世界繁荣昌盛。</li>
+          <li>人类于中央大平原崛起，成为连接众族的枢纽。</li>
+        </ul>
+      </li>
+      <li>
+        <div class="era">寂灭鏖战纪元</div>
+        <div class="epoch">千年浩劫 · 大寂灭之战</div>
+        <ul class="inner">
+          <li>人类强者于西南堕落半岛夺得<b>黑暗徽记</b>，理念逐步扭曲。</li>
+          <li>黑暗以太以<b>堕落半岛</b>为根基，畸变巨兽泛滥。</li>
+          <li><b>近千年</b>大陆拉锯战，位面被撕裂，无数空间裂隙形成。</li>
+          <li>战斗半神燃尽本源陨落、风之半神东境被围杀，半数半神战死。</li>
+          <li>光明半神燃尽本源重创黑暗；五位半神联手将黑暗<b>封印于异次元虚空</b>。</li>
+          <li>半岛轰出永不愈合的<b>黑暗巨洞</b>；海量遗迹、迷宫、密室被就地封存。</li>
+        </ul>
+      </li>
+      <li>
+        <div class="era">誓约纪元</div>
+        <div class="epoch">当代故事起点 · 冒险大时代</div>
+        <ul class="inner">
+          <li>战后文明重建，人类<b>城邦联盟</b>成型。</li>
+          <li><b>圣光教会</b>立国，守候光明徽记复苏。</li>
+          <li><b>冒险者公会</b>成立，统一魔物、任务、治疗体系。</li>
+          <li>千年以来裂隙不断松动、黑暗以太逐年加剧、邪教复苏、遗迹解封。</li>
+        </ul>
+        <div class="quote" style="margin-top:14px;">
+          当前时代 —— 旧盛世落幕、黑暗回潮、太古秘宝现世的<b>冒险大时代</b>。
+          <span class="src">故事，从这里开始。</span>
+        </div>
+      </li>
+    </ol>
+
+    <section>
+      <h2>世界观核心亮点</h2>
+      <div class="grid g2">
+        <div class="card"><h3>① 无魔神</h3><p class="dim">没有传统人格化魔神，灾难全部来自<b>黑暗以太污染与位面裂隙</b>。</p></div>
+        <div class="card"><h3>② 半神并非无敌</h3><p class="dim">半数战死、半数重伤沉睡，神性力量不再干预凡俗。</p></div>
+        <div class="card"><h3>③ 盛世陨落·史诗复苏</h3><p class="dim">太古极度繁华，现代是<b>衰落复苏期</b>，所有机缘全部来自上古遗留。</p></div>
+        <div class="card"><h3>④ 人类枢纽核心</h3><p class="dim">人类居中为枢纽；教会彻底孤立；精灵掌握唯一真治愈；斗气源自战死战斗半神。</p></div>
+        <div class="card"><h3>⑤ 永恒的对抗</h3><p class="dim">世界永远无法彻底根除黑暗，只能不断<b>镇压、修补、探索上古遗存</b>抗衡灾变。</p></div>
+        <div class="card"><h3>⑥ 传承的号角</h3><p class="dim">9 位本源半神 · 9 件神器 · 黑暗在封印深处蠢动 —— 冒险者的大时代已经来临。</p></div>
+      </div>
+    </section>
+  </section>
+
+  <div class="pagination">
+    <button id="prev">← 上一页</button>
+    <button id="next">下一页 →</button>
+  </div>
+</div>
+
+<footer class="footer">埃拉西亚大陆 · 完整西幻世界观设定 · 可直接用于小说创作</footer>
+
+<script>
+  const pages = ["bg","race","faction","map","history","tl"];
+  let current = 0;
+  const tabs = document.querySelectorAll('.tab');
+  const pageEls = document.querySelectorAll('.page');
+  function show(i){
+    current = (i + pages.length) % pages.length;
+    tabs.forEach((t,idx)=>t.classList.toggle('active', idx===current));
+    pageEls.forEach((p,idx)=>p.classList.toggle('active', idx===current));
+    document.getElementById('prev').disabled = current===0;
+    document.getElementById('next').disabled = current===pages.length-1;
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+  tabs.forEach((t,idx)=>t.addEventListener('click',()=>show(idx)));
+  document.getElementById('prev').addEventListener('click',()=>show(current-1));
+  document.getElementById('next').addEventListener('click',()=>show(current+1));
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight') show(current+1);
+    if(e.key==='ArrowLeft') show(current-1);
+  });
+  show(0);
+</script>
+</body>
+</html>
+
