@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-项目校验脚本 —— 改动后必跑：python3 temp/check.py
+项目校验脚本 —— 改动后必跑：python3 scripts/check.py
 检查 markdown 结构/断链 + HTML 标签平衡/嵌套/断链。
-0 问题才算完成。（本脚本由 AI 创建，按 AGENT.md 规矩保留在 temp/ 中，勿删）
+0 问题才算完成。（本脚本由 AI 创建，按 AGENT.md 规矩保留在 scripts/ 中，勿删）
 """
 import io
 import os
@@ -37,8 +37,8 @@ def scan_md(path):
             probs.append('标题层级跳跃 %d→%d' % (prev, lv))
         prev = lv
 
-    # 仅要求 src/docs/ 下的「专题文件」带返回链接（枢纽本身与根目录 README/AGENT 豁免）
-    in_docs = os.sep + os.path.join('src', 'docs') + os.sep in path
+    # 仅要求 docs/ 下的「专题文件」带返回链接（枢纽本身与根目录 README/AGENT 豁免）
+    in_docs = os.sep + 'docs' + os.sep in path
     if in_docs and os.path.basename(path) != '大纲.md' and '返回 `大纲.md`' not in s:
         probs.append('缺少「返回大纲」链接')
 
@@ -97,8 +97,8 @@ def scan_html(path):
 
 def main():
     md_files = sorted(glob.glob(os.path.join(ROOT, '*.md')) +
-                      glob.glob(os.path.join(ROOT, 'src', 'docs', '*.md')))
-    html_files = sorted(glob.glob(os.path.join(ROOT, 'src', 'site', '*.html')))
+                      glob.glob(os.path.join(ROOT, 'docs', '*.md')))
+    html_files = sorted(glob.glob(os.path.join(ROOT, 'site', '*.html')))
 
     total_bad = 0
 

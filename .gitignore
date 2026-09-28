@@ -1,5 +1,5 @@
-# 只忽略工具缓存与系统垃圾；temp/、_archive/、src/ 全部入库
-# 注意：以下规则必须用 / 根锚定，否则会误伤 temp/research/ 等子目录
+# 只忽略工具缓存与系统垃圾；docs/、site/、scripts/、temp/、archive/ 全部入库
+# 注意：下列规则必须用 / 根锚定，否则会误伤 temp/research/ 等子目录
 /.agent-browser/
 /research/
 .DS_Store
