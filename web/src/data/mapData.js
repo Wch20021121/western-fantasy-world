@@ -82,7 +82,7 @@ export const regions = [
       t(275, 165, '#4a3f2a', 14, '灰铁群山', { 'font-weight': 'bold', 'text-anchor': 'middle', 'font-family': 'serif' }),
       t(275, 183, '#6a5a38', 9, '矮人九炉 · 以太赋形圣地', { 'text-anchor': 'middle' }),
       { t: 'circle', a: { cx: 275, cy: 230, r: 5, fill: '#b08a3e', stroke: '#7a5c20', 'stroke-width': 1 } },
-      t(275, 248, '#7a5c20', 9, '地心殿堂 · 不动者沉眠', { 'text-anchor': 'middle' }),
+      t(275, 248, '#7a5c20', 9, '地心殿堂 · 现任土神居此', { 'text-anchor': 'middle' }),
       { t: 'ellipse', a: { cx: 255, cy: 195, rx: 105, ry: 78, fill: 'transparent', stroke: 'transparent' } }
     ],
     tip: { ruler: '矮人九炉联合体', hazard: '低', key: '以太赋形圣地；地心殿堂里睡着现任土神与大地磐石玺', tag: '灵地 · 灰铁地心' }
@@ -95,7 +95,7 @@ export const regions = [
       { t: 'ellipse', a: { cx: 620, cy: 242, rx: 72, ry: 52, fill: '#c2e0b2', stroke: '#7db36a', 'stroke-width': 1.5 } },
       t(620, 232, '#225a2a', 14, '精灵圣林', { 'font-weight': 'bold', 'text-anchor': 'middle', 'font-family': 'serif' }),
       t(620, 250, '#48753a', 9, '世界树之枝 · 闭林一万三千年', { 'text-anchor': 'middle' }),
-      t(620, 264, '#5a8a4a', 8, '树根之下：常青者与生命徽记', { 'text-anchor': 'middle' })
+      t(620, 264, '#5a8a4a', 8, '树根之下：现任生命神与生命徽记', { 'text-anchor': 'middle' })
     ],
     tip: { ruler: '精灵（闭林，不接入传送网）', hazard: '高（擅入者死）', key: '现任生命神居此；世界树之枝与生命徽记同在树根之下', tag: '灵地 · 生命' }
   },
@@ -237,7 +237,7 @@ export const regions = [
     draw: [
       { t: 'ellipse', a: { cx: 600, cy: 660, rx: 118, ry: 34, fill: '#8fbcd8', 'fill-opacity': '.35', stroke: '#5a90b8', 'stroke-width': 1.4, 'stroke-dasharray': '6 5' } },
       t(600, 655, '#3a6a8a', 10, '◈ 深海宫殿 · 沧澜潮音珠 ◈', { 'font-family': 'serif', 'text-anchor': 'middle' }),
-      t(600, 672, '#5a80a0', 8, '海裔守护 · 潮音之主与水晶徽记沉眠（海水之下）', { 'text-anchor': 'middle' })
+      t(600, 672, '#5a80a0', 8, '海裔守护 · 现任水神与沧澜潮音珠（海水之下）', { 'text-anchor': 'middle' })
     ],
     tip: { ruler: '海裔（无法布设传送阵）', hazard: '高', key: '现任水神与沧澜潮音珠都在这里——深海沟与洋流迷宫是它的天然屏障', tag: '灵地 · 水' }
   }

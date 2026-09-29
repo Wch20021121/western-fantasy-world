@@ -37,7 +37,7 @@
       <tr><td>徽记碎屑</td><td>Sigil Shards</td><td>持有者<b>形神俱灭</b>时，徽记自行崩散后的碎屑，混入其兵器残骸（战斗→古战场；火→焚天活火山地脉）</td></tr>
       <tr><td>本源半神</td><td>Primal Demigod</td><td>获本源认可、持有一道权柄者</td></tr>
       <tr><td><b>准神（T4）</b></td><td><b>Quasi-Deity</b></td><td><b>六阶本源期巅峰、未获徽记者</b>。能与四元素半神过手、能拖很久，但打不赢。全大陆约 <b>250 人</b>（斗气系约 150，魔法系约 100），<b>内部战力分化极其严重</b></td></tr>
-      <tr><td>形神俱灭</td><td>Annihilation</td><td>被打到本源崩解，彻底消散。<b>那一代九位里有六位如此：生命 / 水 / 土 / 火 / 黑暗 战死，斗神自碎其印</b></td></tr>
+      <tr><td>形神俱灭</td><td>Annihilation</td><td>被打到本源崩解，彻底消散。<b>那一代有五位如此：水 / 土 / 火 / 黑暗 战死，斗神自碎其印</b>（生命是本源耗尽的牺牲，光明是归寂）</td></tr>
       <tr><td><b>神位迭代</b></td><td><b>Succession of Seats</b></td><td><b>持有者死亡或卸权后，徽记回归无主、保持完好，它会自己选下一个人。</b>三万年间已换过多代</td></tr>
       <tr><td><b>空悬神位</b></td><td><b>Vacant Seat</b></td><td><b>当代四座</b>：黑暗（印封于异次元）· 光明（印在圣山）· 战斗（印碎，永不可继任）· 火（印下落不明）</td></tr>
       <tr><td><b>自碎其印</b></td><td><b>Self-Shattering</b></td><td>持有者主动打碎自己的徽记。三万年来只有斗神做过——<b>他把神位拆成了全大陆人人可得的斗气</b></td></tr>
@@ -95,8 +95,8 @@
     <h2>术语 · 地理与器物</h2>
     <table>
       <tr><th>中文</th><th>英文</th><th>备注</th></tr>
-      <tr><td>灰铁群山</td><td>Greyiron Mountains</td><td>矮人九炉 · 地心殿堂（不动者沉眠）</td></tr>
-      <tr><td>精灵圣林</td><td>Elven Sanctum</td><td>世界树之根 · 常青者沉眠</td></tr>
+      <tr><td>灰铁群山</td><td>Greyiron Mountains</td><td>矮人九炉 · 地心殿堂（现任土神居此）</td></tr>
+      <tr><td>精灵圣林</td><td>Elven Sanctum</td><td>世界树之枝 · 现任生命神居此</td></tr>
       <tr><td>兽人荒原</td><td>Orcish Wastes</td><td>焚天活火山在其西侧</td></tr>
       <tr><td>焚天活火山</td><td>The Emberwake</td><td><b>万炉之主的死地与坟</b>；熔火宝珠残骸沉于地脉，<b>火徽记下落不明</b></td></tr>
       <tr><td><b>东境 · 风眼</b></td><td><b>The Eye</b></td><td>大陆东海岸外<b>三万年不散的风暴</b>；无系者重伤沉睡于此，风徽记随其主体</td></tr>
@@ -108,7 +108,7 @@
       <tr><td>黑暗巨洞</td><td>The Dark Maw</td><td>永不愈合的世界最大裂隙</td></tr>
       <tr><td>符文禁区</td><td>The Sigil Wards</td><td>堕落半岛外围，以太浓度致死</td></tr>
       <tr><td>龙岛 · 龙脊雪峰</td><td>Dragon Isle · Ridgepeak</td><td>龙祖神殿（无人主持）</td></tr>
-      <tr><td>深海宫殿</td><td>The Abyssal Palace</td><td>沧澜潮音珠 · 潮音之主沉眠</td></tr>
+      <tr><td>深海宫殿</td><td>The Abyssal Palace</td><td>沧澜潮音珠 · 现任水神居此</td></tr>
       <tr><td>以太潮汐 / 潮涨</td><td>Ether Tide / The Rising</td><td>封印衰减导致的周期性以太涨落；已历 14 次</td></tr>
       <tr><td><b>大陆传送网</b></td><td><b>The Waygate Network</b></td></tr>
       <tr><td>联军军械</td><td>The Nine Armaments</td><td>七件人造 + 世界树之枝 + 虚无暗影斗篷</td></tr>

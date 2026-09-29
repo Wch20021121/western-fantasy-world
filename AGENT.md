@@ -43,9 +43,9 @@
 ├── run.sh                 ★★ 一键挂载：`git pull && sh run.sh`（端口在文件内改，或 PORT=xxx 覆盖）
 ├── test.sh                ★★ 本地自测：`sh test.sh`（127.0.0.1:8001，测完自动停，不碰正式服务）
 ├── .gitignore
-├── docs/                  ← 全部 Markdown（18 个，彼此同级）
+├── docs/                  ← 全部 Markdown（19 个，彼此同级）
 │   ├── 大纲.md              ★ 枢纽：全局不变量 / 文件地图 / 阅读路径 / 故事主干
-│   ├── 01_世界底质.md ~ 16_修订记录.md
+│   ├── 01_世界底质.md ~ 17_世界厚度.md
 │   └── Erathia_Setting_Audit.md   漏洞审计（42 条，S/A/B/C 分级）
 ├── web/                   ← ★ Vue 3 + Vite 站点（原静态 site/ 已移入 temp/site_static_v13/）
 │   ├── index.html           Vite 入口（挂载点 #app）

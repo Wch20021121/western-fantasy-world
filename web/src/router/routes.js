@@ -84,6 +84,12 @@ export const routes = [
     component: () => import('@/views/PresentationView.vue')
   },
   {
+    path: '/depth',
+    name: 'depth',
+    meta: { nav: '世界厚度', title: '世界厚度 · 埃拉西亚大陆' },
+    component: () => import('@/views/WorldDepthView.vue')
+  },
+  {
     path: '/glossary',
     name: 'glossary',
     meta: { nav: '术语表', title: '术语表 · 埃拉西亚大陆' },
