@@ -39,7 +39,7 @@ ok(doc.querySelectorAll('svg.regionMap text').length >= 8, `子地图文字节�
 ok(doc.querySelectorAll('.fact').length >= 3, `关键事实 = ${doc.querySelectorAll('.fact').length} 条`)
 ok(doc.querySelectorAll('.fac').length >= 2, `势力划分 = ${doc.querySelectorAll('.fac').length} 项`)
 ok(doc.querySelectorAll('.rg-hooks li').length >= 3, `叙事钩子 = ${doc.querySelectorAll('.rg-hooks li').length} 条`)
-ok(doc.querySelectorAll('header nav a').length === 11, '顶栏导航仍是 11 项（子页不进导航）')
+ok(doc.querySelectorAll('header nav a').length === 12, `顶栏导航 = ${doc.querySelectorAll('header nav a').length} 项（v14 加「世界厚度」→ 11 → 12；子页仍不进导航）`)
 const active = [...doc.querySelectorAll('header nav a')].filter(a=>a.classList.contains('active')).map(a=>a.textContent.trim())
 ok(active.length===1 && active[0]==='地理', `导航高亮 = ${active.join(',')}`)
 

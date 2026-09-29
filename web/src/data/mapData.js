@@ -56,7 +56,8 @@ export const baseLayers = [
     fill: 'url(#inlet)', stroke: '#7fb6d6', 'stroke-width': 1.5
   } },
   t(610, 445, '#2b5f8a', 12, '内海 · 直抵中央', { 'font-family': 'serif' }),
-  t(610, 461, '#4a80a8', 9, '唯一深水出海口 · 咽喉', { 'text-anchor': 'middle' })
+  t(610, 461, '#4a80a8', 9, '唯一深水出海口 · 咽喉', { 'text-anchor': 'middle' }),
+  t(610, 477, '#4a80a8', 9, '五族交互区 · 公会管这一圈岸线', { 'text-anchor': 'middle' })
 ]
 
 /* ============================================================
@@ -70,20 +71,20 @@ export const baseLayers = [
  *   tip    悬浮卡内容
  * ============================================================ */
 export const regions = [
-  /* ② 灰铁群山（西北） */
+  /* ② 灰铁群山（正北） */
   {
-    id: 'iron', slug: 'iron-mountains', num: '②', name: '灰铁群山', en: 'IRON MOUNTAINS', dir: '西北',
+    id: 'iron', slug: 'iron-mountains', num: '②', name: '灰铁群山', en: 'IRON MOUNTAINS', dir: '正北',
     draw: [
       g({ fill: '#b9a97e' }, [
-        { t: 'polygon', a: { points: '200,175 245,145 288,178' } },
-        { t: 'polygon', a: { points: '250,205 290,175 335,212' } },
-        { t: 'polygon', a: { points: '170,220 200,195 235,228' } }
+        { t: 'polygon', a: { points: '390,125 435,95 478,128' } },
+        { t: 'polygon', a: { points: '440,155 480,125 525,162' } },
+        { t: 'polygon', a: { points: '360,170 390,145 425,178' } }
       ]),
-      t(275, 165, '#4a3f2a', 14, '灰铁群山', { 'font-weight': 'bold', 'text-anchor': 'middle', 'font-family': 'serif' }),
-      t(275, 183, '#6a5a38', 9, '矮人九炉 · 以太赋形圣地', { 'text-anchor': 'middle' }),
-      { t: 'circle', a: { cx: 275, cy: 230, r: 5, fill: '#b08a3e', stroke: '#7a5c20', 'stroke-width': 1 } },
-      t(275, 248, '#7a5c20', 9, '地心殿堂 · 现任土神居此', { 'text-anchor': 'middle' }),
-      { t: 'ellipse', a: { cx: 255, cy: 195, rx: 105, ry: 78, fill: 'transparent', stroke: 'transparent' } }
+      t(465, 115, '#4a3f2a', 14, '灰铁群山', { 'font-weight': 'bold', 'text-anchor': 'middle', 'font-family': 'serif' }),
+      t(465, 133, '#6a5a38', 9, '矮人九炉 · 以太赋形圣地', { 'text-anchor': 'middle' }),
+      { t: 'circle', a: { cx: 465, cy: 180, r: 5, fill: '#b08a3e', stroke: '#7a5c20', 'stroke-width': 1 } },
+      t(465, 198, '#7a5c20', 9, '地心殿堂 · 现任土神居此', { 'text-anchor': 'middle' }),
+      { t: 'ellipse', a: { cx: 445, cy: 145, rx: 105, ry: 78, fill: 'transparent', stroke: 'transparent' } }
     ],
     tip: { ruler: '矮人九炉联合体', hazard: '低', key: '以太赋形圣地；地心殿堂里睡着现任土神与大地磐石玺', tag: '灵地 · 灰铁地心' }
   },
@@ -116,13 +117,13 @@ export const regions = [
     tip: { ruler: '原班风神（凯瑞尔 · 无系者）', hazard: '绝地', key: '三万年不散的风暴——里面睡着一个被同族用命换回来的人', tag: '灵地 · 风' }
   },
 
-  /* ④ 兽人诸部荒原（西南）—— 原图没有轮廓，补一个命中区 */
+  /* ④ 兽人诸部荒原（内海西南岸）—— 原图没有轮廓，补一个命中区 */
   {
-    id: 'wastes', slug: 'orc-wastes', num: '④', name: '兽人诸部荒原', en: 'ORCISH WASTES', dir: '西南',
+    id: 'wastes', slug: 'orc-wastes', num: '④', name: '兽人诸部荒原', en: 'ORCISH WASTES', dir: '内海西南岸',
     draw: [
-      { t: 'ellipse', a: { cx: 268, cy: 448, rx: 132, ry: 78, fill: '#e6dcc0', 'fill-opacity': '.55', stroke: '#c2ad82', 'stroke-width': 1.4, 'stroke-dasharray': '5 4' } },
-      t(278, 430, '#4a3a24', 13, '兽人诸部荒原', { 'font-weight': 'bold', 'text-anchor': 'middle', 'font-family': 'serif' }),
-      t(278, 448, '#6a5533', 9, '蛮荒尚武 · 无统一政权', { 'text-anchor': 'middle' })
+      { t: 'ellipse', a: { cx: 420, cy: 470, rx: 95, ry: 55, fill: '#e6dcc0', 'fill-opacity': '.55', stroke: '#c2ad82', 'stroke-width': 1.4, 'stroke-dasharray': '5 4' } },
+      t(470, 448, '#4a3a24', 13, '兽人诸部荒原', { 'font-weight': 'bold', 'text-anchor': 'middle', 'font-family': 'serif' }),
+      t(470, 466, '#6a5533', 9, '蛮荒尚武 · 无统一政权 · 靠内海', { 'text-anchor': 'middle' })
     ],
     tip: { ruler: '诸部各自为政（无王）', hazard: '高', key: '火徽记传闻埋在这一带；野灵地与奴隶贸易的重叠区', tag: '边陲废弃型野灵地' }
   },
@@ -132,25 +133,25 @@ export const regions = [
     id: 'ember', slug: 'orc-wastes', num: '④', name: '焚天活火山', en: 'EMBERWAKE', dir: '荒原西侧',
     nested: true,
     draw: [
-      { t: 'polygon', a: { points: '148,472 176,436 204,472', fill: '#c97d55', stroke: '#9a4a30', 'stroke-width': 1.2 } },
-      t(176, 428, '#6a301a', 11, '焚天活火山', { 'font-weight': 'bold', 'text-anchor': 'middle', 'font-family': 'serif' }),
-      t(176, 488, '#8a4a2a', 8, '万炉之主战死之地 · 他的坟', { 'text-anchor': 'middle' }),
-      t(176, 500, '#9a5a3a', 8, '火徽记 · 下落不明', { 'text-anchor': 'middle' }),
-      { t: 'ellipse', a: { cx: 176, cy: 462, rx: 52, ry: 44, fill: 'transparent', stroke: 'transparent' } }
+      { t: 'polygon', a: { points: '337,485 365,449 393,485', fill: '#c97d55', stroke: '#9a4a30', 'stroke-width': 1.2 } },
+      t(365, 441, '#6a301a', 11, '焚天活火山', { 'font-weight': 'bold', 'text-anchor': 'middle', 'font-family': 'serif' }),
+      t(365, 501, '#8a4a2a', 8, '万炉之主战死之地 · 他的坟', { 'text-anchor': 'middle' }),
+      t(365, 513, '#9a5a3a', 8, '火徽记 · 下落不明', { 'text-anchor': 'middle' }),
+      { t: 'ellipse', a: { cx: 365, cy: 475, rx: 52, ry: 44, fill: 'transparent', stroke: 'transparent' } }
     ],
     tip: { ruler: '无人（绝地）', hazard: '物理不可达', key: '万炉之主的坟；熔火宝珠残骸沉于地脉，火徽记下落不明', tag: '灵地 · 火' }
   },
 
-  /* ⑤ 圣山（北部） */
+  /* ⑤ 圣山（南方 · 正对堕落半岛） */
   {
-    id: 'holy', slug: 'holy-mountain', num: '⑤', name: '圣山 · 圣光圣庭国', en: 'HOLY MOUNTAIN', dir: '北部',
+    id: 'holy', slug: 'holy-mountain', num: '⑤', name: '圣山 · 圣光圣庭国', en: 'HOLY MOUNTAIN', dir: '南方 · 正对堕落半岛',
     draw: [
-      { t: 'path', a: { d: 'M450,110 L480,78 L510,110 L495,108 L510,132 L450,132 L465,108 Z', fill: '#a8a87e', stroke: '#8a8a6a', 'stroke-width': 1 } },
-      t(480, 70, '#5a5a3a', 11, '圣山 · 圣光圣庭国', { 'font-weight': 'bold', 'text-anchor': 'middle', 'font-family': 'serif' }),
-      t(480, 152, '#7a7a4a', 8, '破晓圣盾 · 光明徽记（无主）', { 'text-anchor': 'middle' }),
-      { t: 'ellipse', a: { cx: 480, cy: 112, rx: 62, ry: 52, fill: 'transparent', stroke: 'transparent' } }
+      { t: 'path', a: { d: 'M220,450 L250,418 L280,450 L265,448 L280,472 L220,472 L235,448 Z', fill: '#a8a87e', stroke: '#8a8a6a', 'stroke-width': 1 } },
+      t(250, 410, '#5a5a3a', 11, '圣山 · 圣光圣庭国', { 'font-weight': 'bold', 'text-anchor': 'middle', 'font-family': 'serif' }),
+      t(250, 492, '#7a7a4a', 8, '破晓圣盾 · 空印座（对外宣称锁印）', { 'text-anchor': 'middle' }),
+      { t: 'ellipse', a: { cx: 250, cy: 452, rx: 62, ry: 52, fill: 'transparent', stroke: 'transparent' } }
     ],
-    tip: { ruler: '圣光圣庭国（教会）', hazard: '中（政治高压）', key: '一把锁了三万年的锁——世上唯一无主且完整的光明徽记就在这里', tag: '四座空位之一' }
+    tip: { ruler: '圣光圣庭国（教会）', hazard: '中（政治高压）', key: '对外宣称锁着光明徽记——真相：圣山只有破晓圣盾与一座空印座，真印在异次元里压着黑暗；朝圣＝渡海加固封印', tag: '四座空位之一' }
   },
 
   /* ① 人类中央平原 */
@@ -251,7 +252,13 @@ export const overlays = [
     { t: 'path', a: { d: 'M640,290 C570,290 530,280 520,290' } },
     { t: 'path', a: { d: 'M345,420 C390,390 440,360 480,330' } },
     { t: 'path', a: { d: 'M330,290 C710,220 770,190 810,170' } },
-    { t: 'path', a: { d: 'M360,550 C355,590 300,600 250,602' } }
+    { t: 'path', a: { d: 'M360,550 C355,590 300,600 250,602' } },
+    { t: 'path', a: { d: 'M258,506 C266,520 278,528 290,536' } }
+  ]),
+  g({}, [
+    { t: 'circle', a: { cx: 738, cy: 214, r: 7, fill: '#c98a4a', stroke: '#8a5a2a', 'stroke-width': 1.5 } },
+    t(738, 194, '#8a5a2a', 11, '龙涎渡 · 龙货集散', { 'text-anchor': 'middle', 'font-family': 'serif', 'font-weight': 'bold' }),
+    t(738, 238, '#a0703a', 8, '倒爷 · 龙人原料', { 'text-anchor': 'middle' })
   ]),
   { t: 'g', a: { transform: 'translate(103,50)', 'font-size': 11, fill: '#2b5f8a', 'font-family': 'serif', 'text-anchor': 'middle' }, c: [
     { t: 'circle', a: { r: 28, fill: 'rgba(255,255,255,.5)', stroke: '#2b5f8a', 'stroke-width': 2 } },
@@ -274,5 +281,6 @@ export const legend = [
   { color: '#8ab4d4', label: '东境风眼（无系者沉眠）' },
   { color: '#b08a3e', label: '誓约之地（中立）' },
   { color: '#7d3fb0', label: '半岛符文禁区' },
+  { color: '#c98a4a', label: '龙涎渡（龙货集散 · 龙人源头）' },
   { color: '#2b5f8a', label: '主要航路' }
 ]

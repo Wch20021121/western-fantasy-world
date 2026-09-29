@@ -28,7 +28,7 @@ const svg = doc.querySelector('svg#continentMap')
 ok(!!svg, `svg#continentMap 存在（viewBox=${svg?svg.getAttribute('viewBox'):'-'}）`)
 const gs = [...doc.querySelectorAll('g.map-region')]
 ok(gs.length === 12, `区域组 = ${gs.length}（应为 12：11 区 + 焚天火山）`)
-ok(doc.querySelectorAll('.map-legend .legend-item').length === 11, `图例 = ${doc.querySelectorAll('.map-legend .legend-item').length} 项`)
+ok(doc.querySelectorAll('.map-legend .legend-item').length === 12, `图例 = ${doc.querySelectorAll('.map-legend .legend-item').length} 项（v15 加了「龙涎渡」→ 11 → 12）`)
 ok(doc.querySelectorAll('svg text').length > 30, `SVG 文本节点 = ${doc.querySelectorAll('svg text').length} 个`)
 ok(!doc.querySelector('.map-tip'), '未 hover 时不显示提示卡')
 

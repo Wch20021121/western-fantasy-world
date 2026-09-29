@@ -14,7 +14,7 @@
     </table>
     <div class="callout">
       <b>纪年方式</b>：以「誓约之巅立约」为元年。<br>
-      <b>三套纪年并行（v10）</b>：<b>潮数纪年</b>（民间 · 冒险者 · 各族部落）· <b>誓约纪元</b>（城邦官府 · 教会 · 公会文书）· <b>建炉纪年</b>（矮人九炉 / 西北邦）。<br><b>官府记的是秩序，百姓记的是灾难。</b>普通人更常按「<b>潮</b>」来记——「第 13 潮后三百年」比「誓约纪元七千余年」常见得多。<br><b>历法</b>：一年 12 个月 360 天，余 5 天为「<b>无月日</b>」（不计入任何纪年）；月名按潮势分四组——<b>潮起 / 潮盛 / 潮落 / 静潮</b>。
+      <b>三套纪年并行（v10）</b>：<b>潮数纪年</b>（民间 · 冒险者 · 各族部落）· <b>誓约纪元</b>（城邦官府 · 教会 · 公会文书）· <b>建炉纪年</b>（矮人九炉 / 北邦）。<br><b>官府记的是秩序，百姓记的是灾难。</b>普通人更常按「<b>潮</b>」来记——「第 13 潮后三百年」比「誓约纪元七千余年」常见得多。<br><b>历法</b>：一年 12 个月 360 天，余 5 天为「<b>无月日</b>」（不计入任何纪年）；月名按潮势分四组——<b>潮起 / 潮盛 / 潮落 / 静潮</b>。
     </div>
   </section>
 
@@ -39,8 +39,8 @@
       <tr><td><b>准神（T4）</b></td><td><b>Quasi-Deity</b></td><td><b>六阶本源期巅峰、未获徽记者</b>。能与四元素半神过手、能拖很久，但打不赢。全大陆约 <b>250 人</b>（斗气系约 150，魔法系约 100），<b>内部战力分化极其严重</b></td></tr>
       <tr><td>形神俱灭</td><td>Annihilation</td><td>被打到本源崩解，彻底消散。<b>那一代有五位如此：水 / 土 / 火 / 黑暗 战死，斗神自碎其印</b>（生命是本源耗尽的牺牲，光明是归寂）</td></tr>
       <tr><td><b>神位迭代</b></td><td><b>Succession of Seats</b></td><td><b>持有者死亡或卸权后，徽记回归无主、保持完好，它会自己选下一个人。</b>三万年间已换过多代</td></tr>
-      <tr><td><b>空悬神位</b></td><td><b>Vacant Seat</b></td><td><b>当代四座</b>：黑暗（印封于异次元）· 光明（印在圣山）· 战斗（印碎，永不可继任）· 火（印下落不明）</td></tr>
-      <tr><td><b>自碎其印</b></td><td><b>Self-Shattering</b></td><td>持有者主动打碎自己的徽记。三万年来只有斗神做过——<b>他把神位拆成了全大陆人人可得的斗气</b></td></tr>
+      <tr><td><b>空悬神位</b></td><td><b>Vacant Seat</b></td><td><b>当代四座</b>：黑暗（印封于异次元）· 光明（印与黑暗<b>同封于异次元当锁</b>，对外宣称圣山）· 战斗（印碎，永不可继任）· 火（印下落不明）</td></tr>
+      <tr><td><b>自碎其印</b></td><td><b>Self-Shattering</b></td><td><b>持有者主动献祭自己的印</b>（黑暗以太随之灌入而碎）。三万年来只有斗神做过——<b>他把神位拆成了全大陆人人可得的斗气</b>。这也是「徽记不可毁」的唯二例外之一（另一条：被黑暗以太侵蚀）</td></tr>
       <tr><td><b>无名之人</b></td><td><b>The Nameless One</b></td><td>三万年前补上最后一击、杀死蚀主的那个人类士兵。<b>无名、无天赋、未被任何东西认可</b></td></tr>
       <tr><td>归寂</td><td>The Quiet Passing</td><td><b>主动封存本体</b>，不再现世；徽记完整但沉寂（光明）</td></tr>
       <tr><td>本源创伤</td><td>Primal Wound</td><td>黑暗以太侵入本源所致的不可逆创伤，只能以长眠压制。<b>龙神与风神皆为此伤</b></td></tr>
@@ -64,7 +64,7 @@
       <tr><td>斗气七阶</td><td>The Seven Ranks of Aura</td><td>淬体 → 凝气 → 罡气 → 战魂 → 斗域 → 本源 → 神阶</td></tr>
       <tr><td>魔法七阶</td><td>The Seven Ranks of Magic</td><td>感知 → 引灵 → 术式 → 领域 → 大魔导 → 本源 → 神阶</td></tr>
       <tr><td>战魂 / 斗域</td><td>War-Soul / Aura Domain</td><td>第四阶与第五阶：斗气带上个人之「意」→ 外放成「域」</td></tr>
-      <tr><td>神阶七则</td><td>The Seven Canons of Divinity</td><td>唯徽记可至 · 唯认可可用 · 权柄不枯竭但肉身会残 · 认可终身（<b>召回</b>）· 半神可被杀 · <b>神位可迭代</b> · 神阶也受约束</td></tr>
+      <tr><td>神阶七则</td><td>The Seven Canons of Divinity</td><td>唯徽记可至 · <b>且须同源（印有权柄属性；战斗印已碎 → 斗气永无神位）</b> · 唯认可可用 · 权柄不枯竭但肉身会残 · 认可终身（<b>召回</b>）· 半神可被杀 · <b>神位可迭代</b> · 神阶也受约束</td></tr>
     </table>
   </section>
 
@@ -74,7 +74,7 @@
       <tr><th>中文</th><th>英文</th><th>备注</th></tr>
       <tr><td>埃拉西亚大陆</td><td>Erathia</td><td>世界名；与《英雄无敌 3》人类王国同名，商业化需注意</td></tr>
       <tr><td>人类城邦联盟</td><td>The City League</td><td>中央平原 · 数十城邦 · 誓约议事厅</td></tr>
-      <tr><td>圣光圣庭国</td><td>The Holy See of Light</td><td>圣山北境 · 神权教国 · 持被锁起的光明徽记</td></tr>
+      <tr><td>圣光圣庭国</td><td>The Holy See of Light</td><td><b>南方圣山（正对堕落半岛）</b> · 神权教国 · <b>宣称</b>持锁光明徽记（实为封印看守者）</td></tr>
       <tr><td>冒险者公会</td><td>The Adventurers' Guild</td><td>约 300 年前成立 · 三重垄断 · 半岛发证权</td></tr>
       <tr><td>九炉议会</td><td>The Council of Nine Forges</td><td>矮人 · 灰铁群山</td></tr>
       <tr><td>圣林长老议会</td><td>The Elder Conclave</td><td>精灵 · 闭林自守</td></tr>
@@ -100,7 +100,7 @@
       <tr><td>兽人荒原</td><td>Orcish Wastes</td><td>焚天活火山在其西侧</td></tr>
       <tr><td>焚天活火山</td><td>The Emberwake</td><td><b>万炉之主的死地与坟</b>；熔火宝珠残骸沉于地脉，<b>火徽记下落不明</b></td></tr>
       <tr><td><b>东境 · 风眼</b></td><td><b>The Eye</b></td><td>大陆东海岸外<b>三万年不散的风暴</b>；无系者重伤沉睡于此，风徽记随其主体</td></tr>
-      <tr><td>圣山</td><td>The Holy Mount</td><td>破晓圣盾与被锁起的光明徽记</td></tr>
+      <tr><td>圣山</td><td>The Holy Mount</td><td>破晓圣盾与<b>一座空印座</b>（光明印实与黑暗同封于异次元；<b>「圣山是假的」仅教宗口传</b>）</td></tr>
       <tr><td>中央平原</td><td>The Central Plain</td><td>三面接壤诸族 · 一面朝内海</td></tr>
       <tr><td>内海</td><td>The Inner Sea</td><td>直插大陆腹地 · 唯一出海口被群岛链扼守</td></tr>
       <tr><td>誓约之地 / 誓约之巅</td><td>Oathhold / Oathspire</td><td>中立缓冲带 · 公会总部</td></tr>
