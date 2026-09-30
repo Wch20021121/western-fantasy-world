@@ -25,11 +25,38 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 class Handler(SimpleHTTPRequestHandler):
-    """只做一件事：把日志打到 stdout（便于重定向进 temp/*.log），其余走默认实现。"""
+    """只做两件事：日志打到 stdout；给 html 外壳与带哈希的资源加缓存策略。"""
 
     def log_message(self, fmt, *args):
         sys.stdout.write("%s - %s\n" % (self.log_date_time_string(), fmt % args))
         sys.stdout.flush()
+
+    def send_head(self):
+        # 容错：部分客户端（如 curl 直接写中文 URL）不百分号编码，直接发原始 UTF-8 字节；
+        # http.server 会按 latin-1 解成乱码 → 404。先把乱码还原成真 UTF-8 再走原逻辑。
+        # 已百分号编码的路径是纯 ASCII，往返转换是无操作，不受影响。
+        try:
+            fixed = self.path.encode('latin-1').decode('utf-8')
+            if fixed != self.path:
+                self.path = fixed
+        except (UnicodeEncodeError, UnicodeDecodeError):
+            pass
+        return super().send_head()
+
+    def end_headers(self):
+        # v15：不加缓存头时，浏览器会启发式缓存 index.html ——
+        # 旧外壳引用旧的 hash 文件名，而重建后旧 hash 已不存在 → 表现为“内容没更新 / 白屏”。
+        #   · html 外壳 → no-cache（每次回源校验，永远拿到新 hash）
+        #   · /assets/  → 文件名自带内容哈希，改内容必改名，可长缓存
+        try:
+            path = self.path.split('?', 1)[0]
+            if path.endswith('.html') or path in ('', '/'):
+                self.send_header('Cache-Control', 'no-cache')
+            elif '/assets/' in path:
+                self.send_header('Cache-Control', 'public, max-age=31536000, immutable')
+        except Exception:
+            pass
+        super().end_headers()
 
 
 def main():

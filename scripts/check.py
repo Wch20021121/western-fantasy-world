@@ -4,7 +4,7 @@
 项目校验脚本 —— 改动后必跑：python3 scripts/check.py
 0 问题才算完成。（本脚本由 AI 创建，按 AGENT.md 规矩保留在 scripts/ 中，勿删）
 
-校验三块：
+校验四块：
   A. Markdown（根目录 + docs/）
        H1 唯一 · 标题层级不跳跃 · 专题页含「返回大纲」 · 相对链接不断链
   B. Vue 工程（web/）
@@ -16,6 +16,9 @@
        .gitignore 确实挡住了 node_modules 与 dist
   C. 构建产物（web/dist 若存在）
        index.html 引用的 js / css 真实存在
+  D. 全文静态站（site/）
+       每篇 docs/*.md 都有同名页面 · 页面不得比文档旧（漏同步即报错）
+       金丝雀内容必须在（本轮新增设定的关键词）· 站内链接与锚点不断
 """
 import io
 import os
@@ -278,6 +281,88 @@ def scan_dist():
 
 # ───────────────── D. Canon 一致性（已否决的旧口径不得重现）─────────────────
 # 每一条都是 docs/03_神位与徽记.md 已定死的事实，修掉过一次就不许再写回来。
+def scan_site():
+    """site/ 全文静态站：覆盖度 · 新鲜度 · 金丝雀 · 站内链接与锚点
+
+    HTML 由 AI 按 AGENT.md §7 直接维护（禁止脚本覆盖）——本检查负责“漏同步当场卡住”。
+    """
+    site = os.path.join(ROOT, 'site')
+    probs = []
+    if not os.path.isdir(site):
+        return ['缺少 site/（全文静态站）——按 AGENT.md §7 流程补齐']
+
+    # ① 覆盖度 + 新鲜度：每篇 docs 都要有页面，且页面不得比文档旧
+    for d in sorted(glob.glob(os.path.join(ROOT, 'docs', '*.md'))):
+        stem = os.path.splitext(os.path.basename(d))[0]
+        page = os.path.join(site, stem + '.html')
+        rel = os.path.relpath(d, ROOT)
+        if not os.path.exists(page):
+            probs.append('site/ 缺少 %s.html（docs 有此文）——按 AGENT.md §7 新增页面' % stem)
+        elif os.path.getmtime(d) > os.path.getmtime(page):
+            probs.append('%s 比 site/%s.html 新 → 文档已改但页面没同步（AGENT.md §7：AI 直接改 HTML）'
+                         % (rel, stem))
+
+    for must in ('index.html', 'map.html'):
+        if not os.path.exists(os.path.join(site, must)):
+            probs.append('site/ 缺少 ' + must)
+
+    # ② 金丝雀：近期新增的关键设定必须出现在对应页面（防“同步了但漏了重点”）
+    CANARY = [
+        ('index.html', '四层冲突'),
+        ('index.html', '叙事钩子'),
+        ('大纲.html', '全文静态站'),
+        ('02_力量体系.html', '斗气的神门'),
+        ('03_神位与徽记.html', '权柄的属性倾向'),
+        ('05_战争与堕落.html', '圣光教会的圣所'),
+        ('07_种族与社会.html', '三层结构'),
+        ('07_种族与社会.html', '龙人'),
+        ('08_地理与传送.html', '内海交互区'),
+        ('09_势力与政体.html', '次级势力'),
+        ('09_势力与政体.html', '圣山没有印'),
+        ('16_修订记录.html', 'v16'),
+        ('17_世界厚度.html', '验印师'),
+    ]
+    for page, kw in CANARY:
+        p = os.path.join(site, page)
+        if not os.path.exists(p):
+            continue
+        try:
+            s = io.open(p, encoding='utf-8').read()
+        except (UnicodeDecodeError, OSError):
+            continue
+        if kw not in s:
+            probs.append('site/%s 缺少金丝雀内容「%s」——页面与当前大纲脱节' % (page, kw))
+
+    # ③ 站内链接（含锚点）不断
+    ids_cache = {}
+
+    def ids_of(path):
+        if path not in ids_cache:
+            try:
+                s = io.open(path, encoding='utf-8').read()
+            except (UnicodeDecodeError, OSError):
+                s = ''
+            ids_cache[path] = set(re.findall(r'id="([^"]+)"', s))
+        return ids_cache[path]
+
+    for p in sorted(glob.glob(os.path.join(site, '*.html'))):
+        try:
+            s = io.open(p, encoding='utf-8').read()
+        except (UnicodeDecodeError, OSError):
+            continue
+        for href in re.findall(r'href="([^"]+)"', s):
+            if re.match(r'^(https?:|mailto:|javascript:)', href) or href.startswith('#'):
+                continue
+            tgt, _, anchor = href.partition('#')
+            if tgt and not os.path.exists(os.path.join(site, tgt)):
+                probs.append('%s 断链 → %s' % (os.path.relpath(p, ROOT), href))
+            elif anchor:
+                tp = os.path.join(site, tgt) if tgt else p
+                if anchor not in ids_of(tp):
+                    probs.append('%s 锚点不存在 → %s' % (os.path.relpath(p, ROOT), href))
+    return probs
+
+
 CANON_FORBIDDEN = [
     ('三死',            '九神结局旧口径 → 应为：战死4（水土火黑暗）· 牺牲1（生命）· 归寂1（光明）· 自碎1（战斗）'),
     ('五位沉睡',        '沉睡的只有龙神、风神两位（canon #2：那一代只活两个）'),
@@ -396,6 +481,7 @@ def main():
         ('.gitignore', scan_gitignore),
         ('地图 ↔ 区域详情交叉', scan_map_data),
         ('canon 一致性（docs + web）', scan_canon),
+        ('site 全文站（覆盖·新鲜·金丝雀·链接）', scan_site),
     ]
     for label, fn in vue_checks:
         p = fn()

@@ -9,8 +9,11 @@
 ## 快速开始
 
 ```bash
-# 【日常】拉代码 + 一键挂载（首跑自动装依赖 → 构建 → 挂 8000）
-git pull && sh run.sh
+# 【一键启动·日常】起全文站 site/（端口默认 8000；-f = 被占就直接杀）
+git pull && sh run.sh -p 8000 -f
+
+# 【Vue 交互站】首跑自动装依赖并构建，同样一键
+sh run.sh -p 8000 -f --web
 
 # 【自测】本地冒烟测试 127.0.0.1:8001，测完自动停，不碰正式服务
 sh test.sh
@@ -18,8 +21,9 @@ sh test.sh
 # 【开发】热更新 → http://127.0.0.1:8000/
 cd web && npm install && npm run dev
 
-# 【运维】sh run.sh stop | status | log
-# 【换端口】PORT=9000 sh run.sh   （或直接改 run.sh 里的 PORT=8000）
+# 【运维】sh run.sh stop -p 8000 | status -p 8000 | log -p 8000
+# 【换端口】sh run.sh -p 9000 -f   （旧写法 PORT=9000 sh run.sh 同样支持）
+# 【说明】不加 -f 时端口被占只提示不杀；加 -f 一律杀掉占用者再起；sh run.sh -h 看全部参数
 
 # 从枢纽文档读起（推荐入口）
 open docs/大纲.md
@@ -27,6 +31,23 @@ open docs/大纲.md
 
 > **依赖与构建产物不入库**（`node_modules/`、`dist/` 见 `.gitignore`）；
 > 入库的是 `package.json` + `package-lock.json` + `src/` + **启动方法**。
+
+---
+
+### 📄 全文静态站（`site/` · **随 git 提交 · AI 手工维护**）
+
+19 篇文档的**完整正文页** ＋ 导读首页（一句话世界 · 四层冲突 · 叙事钩子 · 阅读路径 · 文件地图）
+＋ 大陆地图与 11 区详情 ＋ 全文搜索。
+
+```bash
+# 站点已入库 —— clone 下来就能跑，不依赖 node、不依赖构建
+sh run.sh -p 9000 -f          # 一键（-f：端口被占就直接杀；端口默认 8000）
+# 等价：python3 -m http.server 9000 -d site
+```
+
+- **维护规矩**：`docs/` 改了，**由 AI 通读剧情后直接改 HTML**（流程见 `AGENT.md §7`）；**禁止用脚本整页生成覆盖**。
+- **同步校验**：`python3 scripts/check.py` —— 覆盖度（每篇 md 都要有页面）· **新鲜度**（页面比文档旧即报错）· 金丝雀内容 · 站内断链，**0 问题才算同步完成**。
+
 
 ---
 
@@ -66,7 +87,8 @@ open docs/大纲.md
 
 ### 🌐 Vue 站点（`web/src/` · 11 个视图）
 
-同一套内容的可浏览版本，**Vue 3 + Vite + vue-router（hash 路由）**，全站共享 `src/assets/style.css`。原静态站点整体存档在 `temp/site_static_v13/`（工作痕迹，不删）。
+同一套内容的可浏览版本，**Vue 3 + Vite + vue-router（hash 路由）**，全站共享 `src/assets/style.css`。
+（旧静态站已于 **v16 删除**——全文页由 `site/` 接替；`temp/` 里其余工作痕迹不动。）
 
 ```
 web/src/

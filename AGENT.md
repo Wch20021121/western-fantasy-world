@@ -31,6 +31,8 @@
 - ✅ 大改之前先在 `temp/` 里做**dry-run**（只打印、不写盘），确认无误再真正执行。
 
 > **反面例子（不要做）**：跑完一个 patch 脚本后执行 `rm *.py` 清理现场。这会让下一个人（或下一个 AI）**无法复现这次改动**。
+>
+> **v16 例外（用户指令，已执行）**：`temp/site_static_v13/`（v13 版旧静态站存档）**已整目录删除**——它是纯历史存档而非工作痕迹，且 `site/` 已接替其职责。**其余 temp/ 内容仍然一律不许删。**
 
 ---
 
@@ -40,14 +42,14 @@
 西幻世界/
 ├── README.md              仓库首页（对外说明）
 ├── AGENT.md               ★ 你正在读的这份
-├── run.sh                 ★★ 一键挂载：`git pull && sh run.sh`（端口在文件内改，或 PORT=xxx 覆盖）
+├── run.sh                 ★★ 一键启动：`sh run.sh -p 8000 [-f] [--web]`（`-h` 看全部参数；细节见下方「站点怎么跑」与 §7）
 ├── test.sh                ★★ 本地自测：`sh test.sh`（127.0.0.1:8001，测完自动停，不碰正式服务）
 ├── .gitignore
 ├── docs/                  ← 全部 Markdown（19 个，彼此同级）
 │   ├── 大纲.md              ★ 枢纽：全局不变量 / 文件地图 / 阅读路径 / 故事主干
 │   ├── 01_世界底质.md ~ 17_世界厚度.md
 │   └── Erathia_Setting_Audit.md   漏洞审计（42 条，S/A/B/C 分级）
-├── web/                   ← ★ Vue 3 + Vite 站点（原静态 site/ 已移入 temp/site_static_v13/）
+├── web/                   ← ★ Vue 3 + Vite 交互站（含悬停地图与路由版区域页）
 │   ├── index.html           Vite 入口（挂载点 #app）
 │   ├── package.json         依赖与脚本（★ 入库；node_modules 不入库）
 │   ├── vite.config.js       构建配置（dev/preview 均固定 8000 端口、0.0.0.0）
@@ -63,7 +65,12 @@
 │   │   ├── views/*.vue         11 个专题视图 ＋ RegionView（一个组件服务 11 个区域页）
 │   │   └── assets/style.css    全站样式（原 site/style.css）
 │   └── dist/                构建产物（★ 不入库，`npm run build` 可重建）
-├── scripts/               ★ 长期可复用工具（check.py 校验 · serve.sh 启动 · serve.py 服务）
+├── site/                  ← ★ 全文静态站（**AI 手工维护** · 随 git 提交 · 任意机器可跑）
+│   ├── index.html           导读首页（一句话世界 · 四层冲突 · 钩子 · 阅读路径 · 文件地图）
+│   ├── 大纲.html / 01~17.html / 漏洞审计.html   docs 的对应页面（正文唯一真值仍在 docs/）
+│   ├── map.html             大陆地图 + 11 区详情（数据来自 web/src/data 唯一真值）
+│   └── assets/              style.css（美感层）· app.js（全文搜索）· search-data.js
+├── scripts/               ★ 长期可复用工具（check.py 校验 · serve.sh 启动 · serve.py 服务 · dump_data.mjs 地图数据参考）
 ├── temp/                  ★ AI 临时区（一次性脚本 / 测试 / 抓取结果，不删、入库）
 └── archive/               历史存档（v10 拆分前的单体大纲 + v1 单文件站点）
 ```
@@ -75,10 +82,11 @@
 
 | 场景 | 命令 |
 |---|---|
-| **🚀 一键挂载（日常）** | **`sh run.sh`** —— 首跑自动 `npm install` → `build` → 挂 `0.0.0.0:8000`；可反复执行（自动重启） |
+| **🚀 一键启动（日常）** | **`sh run.sh -p 8000 -f`** —— 起全文站 `site/`（秒起、不构建）；可反复执行；**`-f` = 端口被占直接杀，不加只提示**（端口默认 8000） |
+| **🗺 Vue 交互站** | **`sh run.sh -p 8000 -f --web`** —— 首跑自动 `npm install` → `build` → 挂 `web/dist` |
 | **🧪 本地自测** | **`sh test.sh`** —— 在 `127.0.0.1:8001` 起服务跑 7 项冒烟检查，测完自动停；**不碰正式服务**（独立 pid 文件） |
-| **换端口** | `PORT=9000 sh run.sh`（临时）｜或改 `run.sh` 里的 `PORT=8000`（永久）｜或改 `BIND=127.0.0.1` 只留本机 |
-| **停止 / 状态 / 日志** | `sh run.sh stop` · `status` · `log`（底层是 `scripts/serve.sh`，同样支持 `PORT=` 覆盖） |
+| **换端口** | `sh run.sh -p 9000 -f`（推荐）｜旧写法 `PORT=9000 sh run.sh` 同样支持｜`BIND=127.0.0.1` 只留本机 |
+| **停止 / 状态 / 日志** | `sh run.sh stop -p 8000` · `status -p 8000` · `log -p 8000`（**pid 文件按端口分**，丢了也能按端口停；多端口可并存） |
 | **开发 · 热更新** | `cd web && npm run dev` → `http://127.0.0.1:8000/`（与正式服务**互斥**，都占 8000） |
 | **只构建** | `scripts/serve.sh build` → 产出 `web/dist/`（缺依赖会自动装） |
 
@@ -118,6 +126,7 @@ python3 scripts/check.py
 | `*.md` | H1 唯一 · 标题层级不跳跃 · 页首含「返回大纲」· 相对链接不断链 |
 | `web/`（Vue 源码） | 路由表 ↔ 视图**一一对应**（无孤儿、无缺件） · `path/name/meta.nav/meta.title` 齐全且唯一 · 导航由路由表生成 · **无残留旧静态链接** · `.gitignore` 挡住 `node_modules`/`dist` |
 | `web/dist`（若已构建） | `index.html` 引用的 js/css 真实存在 |
+| `site/`（全文站） | 每篇 `docs/*.md` 都有同名页面（缺 = 需按 §7 新增） · **页面不得比文档旧**（漏同步即报错） · **金丝雀内容**必须在（次级势力 / 龙人 / 内海交互区 / 权柄的属性倾向…） · 站内 `href` 不断链 · `index.html` / `map.html` 必在 |
 
 **校验不通过 = 这次改动不算完成。** 修到 0 问题再提交。
 
@@ -166,3 +175,38 @@ python3 scripts/check.py
 
 本设定参考了：《无职转生》**七大列強**（动态排名、名次可被击败）·《诡秘之主》·《蛊真人》·《全职高手》·《冰与火之歌》· **战锤 40K**（半神可死、制衡、放逐≠杀）· 写手社区的「**通过情节讲设定**」共识。
 **只借鉴结构与方法论，不照抄剧情与专有名词。**
+
+---
+
+## 7. 内容更新 → 同步 HTML（`site/` 全文站）· 每次改 docs 后必做
+
+> `site/` 是**给用户直接看的成品页**：纯静态、**随 git 提交**，可在任意机器上
+> `sh run.sh -p 9000 -f` 起服务（等价 `python3 -m http.server 9000 -d site`）。
+>
+> **维护方式（用户定的硬规矩，写死）**：
+> **AI 通读改动后的剧情，直接编辑 HTML；禁止用生成脚本整页覆盖 `site/`。**
+>（`scripts/build_site.py` 已按此删除；`scripts/dump_data.mjs` 只导出地图 JSON 供改 `map.html` 时参考，**不写 html**。）
+>
+> **为什么**：每版设定改动幅度可能很大，机械渲染既不美观、也无法按剧情组织内容；
+> **只有通读改动后的剧情，才能保证「页面 ＝ 当前大纲」。**
+
+**触发**：`docs/` 下任何 md 的增删改（改大纲、改专题、新增章节）。
+
+**步骤**：
+1. **先读改动后的 docs**——先理解这轮剧情/设定在讲什么，而不是逐字找差异。
+2. 打开 `site/<同名>.html`，按改动**重写对应小节**：表格、钩子、canon 条目逐段对齐；
+   正文保持 `article.doc` 语义类，表格包 `.tw`，提示块用 `.callout`。
+3. **结构性变化必须动结构**（都是必须操作，不是可选）：
+   - 新增专题文件 → **新增 `site/<同名>.html`**（照抄任一页骨架：侧栏 nav / 正文 / 页脚，把 `class="on"` 移到自己）
+   - 新增重要设定层（新派系 / 新种族 / 新一层冲突）→ **首页加导读卡**（`site/index.html`）
+   - 首页的「一句话世界 / 四层冲突 / 叙事钩子 / 阅读路径 / 最近更新 / 全部文件」随大纲同步
+   - 地图坐标或 11 区变了 → 改 `site/map.html`（先 `node scripts/dump_data.mjs` 导出最新数据作参考）
+4. **美感红线**：新样式写进 `site/assets/style.css`，优先复用现有 class
+   （hero / btn / group / card / callout / tw / rgcard / chip / kpi …），字体与配色走 `:root` 变量。
+5. 跑 `python3 scripts/check.py` → **0 问题**（含 site 的覆盖度 · 新鲜度 · 金丝雀 · 断链）。
+6. 更新 `docs/16_修订记录.md`（写清：docs 改了什么、**site 对应改了什么**）。
+
+**换页与锚点注意**：
+- 各页骨架固定（`head` → `layout/side` → `main/bar` → `article.doc` → `bar.foot` → 两个 script），新页照抄。
+- 标题锚点用 **GitHub 规则**（小写 · 去标点 · 空格转 `-` · 中文保留），与 md 里写死的 `#锚点` 对齐。
+- 站内链接一律写 `页面.html` 或 `页面.html#锚点`（**不要写 `.md`**）。

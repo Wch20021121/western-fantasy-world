@@ -18,8 +18,10 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PORT="${PORT:-8000}"
 BIND="${BIND:-0.0.0.0}"
 DIR="${2:-web/dist}"
-LOG="$ROOT/temp/serve.log"
-PIDFILE="$ROOT/temp/serve.pid"
+FORCE="${FORCE:-0}"          # 1 = 端口被占就直接杀（run.sh -f 传进来）
+# pid 与日志**按端口分文件**：不同端口可同时跑、互不干扰
+PIDFILE="$ROOT/temp/serve-$PORT.pid"
+LOG="$ROOT/temp/serve-$PORT.log"
 
 mkdir -p "$ROOT/temp"
 
@@ -28,6 +30,25 @@ running() {
   local pid
   pid="$(cat "$PIDFILE" 2>/dev/null)"
   [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null
+}
+
+# 占用 $PORT 的进程：输出 "pid|命令行"（找不到则返回非 0）
+# 用途：① 启动前预检，避免 Address already in use 报错看得人发慌
+#       ② stop 时 pid 文件丢了也能按端口停
+port_user() {
+  local pids pid cmd
+  pids="$(ss -tlnp 2>/dev/null | grep -F ":$PORT " | sed -n 's/.*pid=\([0-9]\{1,\}\).*/\1/p' | sort -u)"
+  if [ -z "$pids" ] && command -v lsof >/dev/null 2>&1; then
+    pids="$(lsof -nP -iTCP:$PORT -sTCP:LISTEN -t 2>/dev/null)"
+  fi
+  [ -n "$pids" ] || return 1
+  for pid in $pids; do
+    cmd="$(tr '\0' ' ' < "/proc/$pid/cmdline" 2>/dev/null || true)"
+    [ -n "$cmd" ] || cmd="(pid $pid)"
+    printf '%s|%s\n' "$pid" "$cmd"
+    return 0
+  done
+  return 1
 }
 
 case "${1:-}" in
@@ -44,6 +65,32 @@ case "${1:-}" in
     if running; then
       echo "⚠️  已在运行 (PID $(cat "$PIDFILE"))，如需换目录请先 stop 或 restart"
       exit 0
+    fi
+    # 端口预检：别让 Address already in use 的堆栈吓到人
+    local_occ=""
+    if local_occ="$(port_user)"; then
+      opid="${local_occ%%|*}"; ocmd="${local_occ#*|}"
+      if [ "$FORCE" = "1" ]; then
+        echo "▶ -f：清掉占用端口 $PORT 的进程 → PID $opid"
+        echo "   $ocmd"
+        kill "$opid" 2>/dev/null || true
+        t=0
+        while port_user >/dev/null 2>&1 && [ "$t" -lt 5 ]; do sleep 1; t=$((t+1)); done
+        if port_user >/dev/null 2>&1; then kill -9 "$opid" 2>/dev/null || true; sleep 1; fi
+        if port_user >/dev/null 2>&1; then
+          echo "❌ 杀不掉，端口仍被占用"
+          exit 1
+        fi
+        echo "✅ 端口 $PORT 已清场"
+      else
+        echo "❌ 端口 $PORT 已被占用 → PID $opid"
+        echo "   $ocmd"
+        case "$ocmd" in
+          *serve.py*) echo "   是本项目的静态服务 → sh run.sh stop -p $PORT（或加 -f 强制接管）" ;;
+          *)          echo "   不是本项目的进程 → 加 -f 直接杀：sh run.sh -p $PORT -f （或换个端口）" ;;
+        esac
+        exit 1
+      fi
     fi
     if [ ! -d "$ROOT/$DIR" ]; then
       echo "❌ 目录不存在：$ROOT/$DIR"
@@ -66,14 +113,32 @@ case "${1:-}" in
     fi
     ;;
   stop)
+    stopped=0
     if running; then
-      kill "$(cat "$PIDFILE")" 2>/dev/null
+      kill "$(cat "$PIDFILE")" 2>/dev/null || true
       rm -f "$PIDFILE"
-      echo "✅ 已停止"
-    else
-      echo "（未在运行）"
-      rm -f "$PIDFILE"
+      echo "✅ 已停止（按 pid 文件）"
+      stopped=1
+      sleep 1
     fi
+    # pid 文件丢了也行：按端口找（只杀本项目的 serve.py）
+    local_occ=""
+    if local_occ="$(port_user)"; then
+      opid="${local_occ%%|*}"; ocmd="${local_occ#*|}"
+      case "$ocmd" in
+        *serve.py*)
+          if kill "$opid" 2>/dev/null; then
+            echo "✅ 已停止（按端口找到 PID $opid）"
+            stopped=1
+            sleep 1
+          fi
+          ;;
+        *)
+          [ "$stopped" = "1" ] || echo "⚠️  端口 $PORT 被其他程序占用（PID $opid）：$ocmd"
+          ;;
+      esac
+    fi
+    [ "$stopped" = "1" ] || { echo "（未在运行）"; rm -f "$PIDFILE"; }
     ;;
   restart)
     "$0" stop
@@ -91,6 +156,12 @@ case "${1:-}" in
       echo "✅ 运行中  PID $(cat "$PIDFILE")  端口 $PORT"
       ss -tlnp 2>/dev/null | grep ":$PORT" || true
     else
+      local_occ=""
+      if local_occ="$(port_user)"; then
+        echo "⚠️  pid 文件未运行，但端口 $PORT 上有进程："
+        echo "   ${local_occ%%|*}  ${local_occ#*|}"
+        exit 1
+      fi
       echo "⭕ 未运行"
       exit 1
     fi
