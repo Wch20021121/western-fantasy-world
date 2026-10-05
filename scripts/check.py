@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 项目校验脚本 —— 改动后必跑：python3 scripts/check.py
-0 问题才算完成。（本脚本由 AI 创建，按 AGENT.md 规矩保留在 scripts/ 中，勿删）
+0 问题才算完成。（本脚本由 AI 创建，按 AGENTS.md 规矩保留在 scripts/ 中，勿删）
 
 校验四块：
   A. Markdown（根目录 + docs/）
@@ -284,12 +284,12 @@ def scan_dist():
 def scan_site():
     """site/ 全文静态站：覆盖度 · 新鲜度 · 金丝雀 · 站内链接与锚点
 
-    HTML 由 AI 按 AGENT.md §7 直接维护（禁止脚本覆盖）——本检查负责“漏同步当场卡住”。
+    HTML 由 AI 按 AGENTS.md §7 直接维护（禁止脚本覆盖）——本检查负责“漏同步当场卡住”。
     """
     site = os.path.join(ROOT, 'site')
     probs = []
     if not os.path.isdir(site):
-        return ['缺少 site/（全文静态站）——按 AGENT.md §7 流程补齐']
+        return ['缺少 site/（全文静态站）——按 AGENTS.md §7 流程补齐']
 
     # ① 覆盖度 + 新鲜度：每篇 docs 都要有页面，且页面不得比文档旧
     for d in sorted(glob.glob(os.path.join(ROOT, 'docs', '*.md'))):
@@ -297,9 +297,9 @@ def scan_site():
         page = os.path.join(site, stem + '.html')
         rel = os.path.relpath(d, ROOT)
         if not os.path.exists(page):
-            probs.append('site/ 缺少 %s.html（docs 有此文）——按 AGENT.md §7 新增页面' % stem)
+            probs.append('site/ 缺少 %s.html（docs 有此文）——按 AGENTS.md §7 新增页面' % stem)
         elif os.path.getmtime(d) > os.path.getmtime(page):
-            probs.append('%s 比 site/%s.html 新 → 文档已改但页面没同步（AGENT.md §7：AI 直接改 HTML）'
+            probs.append('%s 比 site/%s.html 新 → 文档已改但页面没同步（AGENTS.md §7：AI 直接改 HTML）'
                          % (rel, stem))
 
     for must in ('index.html', 'map.html'):
@@ -321,6 +321,13 @@ def scan_site():
         ('09_势力与政体.html', '圣山没有印'),
         ('16_修订记录.html', 'v16'),
         ('17_世界厚度.html', '验印师'),
+        ('02_力量体系.html', '伤害模型'),
+        ('02_力量体系.html', '第七阶在此之前根本不存在'),
+        ('03_神位与徽记.html', '不按配额'),
+        ('05_战争与堕落.html', '设计过这一刻'),
+        ('06_军械与魔物.html', 'S 级不必然要半神'),
+        ('08_地理与传送.html', '三支专属团队'),
+        ('16_修订记录.html', 'v17'),
     ]
     for page, kw in CANARY:
         p = os.path.join(site, page)
@@ -383,6 +390,16 @@ CANON_FORBIDDEN = [
     ('被蚀主一击打出裂缝', '战斗印碎于「主动献祭 ＋ 黑暗以太灌入」，不是被打出裂缝后自碎（canon #25）'),
     ('圣山北境',        '圣山已南迁，正对堕落半岛；教会主场在南方'),
     ('西北邦',          '灰铁群山在正北，称号改为「北邦」'),
+    # ── v17 新增（修完就不许再写回来）──
+    ('黑暗以太武器能打出', 'v17：异属性极限合招也能伤本源，黑暗只是最狠的一档（且被全属性特攻）'),
+    ('只为创造',        'v17：击杀是「诸神皆重伤时，士兵的勇气」，没人设计过那一刻'),
+    ('本就会诞生在那一带', 'v17：神位迭代是命运，不按地域/血统配额'),
+    ('把斗气整理成',    'v17：阶梯是各族后人逐步整理的，不是戈拉赫创造的'),
+    ('本源创伤」不可逆',  'v17：长眠万年养回七七八八，暗伤伴随一生'),
+    ('不可逆的本源创伤', 'v17：同上'),
+    ('原种族继',        'v17：继任是同源使然、非血统规定；印落某族只是命运'),
+    ('落回原种族',      'v17：同上'),
+    ('被尊为「斗气之祖」', 'v17：戈拉赫是第一个登顶者；「斗气之祖」是误传'),
 ]
 
 
@@ -398,6 +415,10 @@ def scan_canon():
     targets += [os.path.join(ROOT, 'README.md')]
     for ext in ('*.vue', '*.js'):
         targets += glob.glob(os.path.join(WEB, 'src', '**', ext), recursive=True)
+    # v17：site 全文站同样受 canon 闸门约束（页面必须与当前大纲一致）
+    # 豁免：变更日志与漏洞审计——职责就是引用「曾经的错误表述」
+    targets += [p for p in glob.glob(os.path.join(ROOT, 'site', '*.html'))
+                if os.path.basename(p) not in ('16_修订记录.html', 'Erathia_Setting_Audit.html')]
 
     for path in targets:
         if 'node_modules' in path:

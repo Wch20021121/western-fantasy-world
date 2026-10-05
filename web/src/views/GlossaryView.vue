@@ -43,7 +43,7 @@
       <tr><td><b>自碎其印</b></td><td><b>Self-Shattering</b></td><td><b>持有者主动献祭自己的印</b>（黑暗以太随之灌入而碎）。三万年来只有斗神做过——<b>他把神位拆成了全大陆人人可得的斗气</b>。这也是「徽记不可毁」的唯二例外之一（另一条：被黑暗以太侵蚀）</td></tr>
       <tr><td><b>无名之人</b></td><td><b>The Nameless One</b></td><td>三万年前补上最后一击、杀死蚀主的那个人类士兵。<b>无名、无天赋、未被任何东西认可</b></td></tr>
       <tr><td>归寂</td><td>The Quiet Passing</td><td><b>主动封存本体</b>，不再现世；徽记完整但沉寂（光明）</td></tr>
-      <tr><td>本源创伤</td><td>Primal Wound</td><td>黑暗以太侵入本源所致的不可逆创伤，只能以长眠压制。<b>龙神与风神皆为此伤</b></td></tr>
+      <tr><td>本源创伤</td><td>Primal Wound</td><td><b>本源被打穿</b>（黑暗最擅长，异属性极限合招亦可）。<b>以万年计的长眠养回七七八八，暗伤伴随一生</b>。<b>龙神与风神皆为此伤</b></td></tr>
       <tr><td>伪半神</td><td>False Demigod</td><td>被以太强推入本源期的畸变巨兽；有蛮力无权柄</td></tr>
     </table>
   </section>

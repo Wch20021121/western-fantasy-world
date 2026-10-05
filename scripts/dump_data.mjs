@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * 把 Vue 站的地图与区域详情数据导出成 JSON（长期工具，按 AGENT.md 放 scripts/）
+ * 把 Vue 站的地图与区域详情数据导出成 JSON（长期工具，按 AGENTS.md 放 scripts/）
  *
  * 用法：node scripts/dump_data.mjs
- * 输出：temp/_map_data.json —— 供 scripts/build_site.py 生成 site/map.html
+ * 输出：temp/_map_data.json —— 供手工修改 site/map.html 时参考（本工具不写 html）
  *
  * 为什么要 shim：web/src/data/regions.js 用了 Vite 别名 import { txt } from '@/lib/svgNodes'，
  * 纯 node 解析不了这个别名，所以在落盘副本里替换成等价的 txt 工厂函数（内容完全一致）。

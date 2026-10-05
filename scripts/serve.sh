@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 静态站点服务管理 —— 长期工具，按 AGENT.md 规矩放在 scripts/ 中，勿删。
+# 静态站点服务管理 —— 长期工具，按 AGENTS.md 规矩放在 scripts/ 中，勿删。
 #
 # 用法：
 #   scripts/serve.sh build            构建 Vue 工程（web/ → web/dist/）

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-静态站点服务器 —— 长期工具，按 AGENT.md 规矩放在 scripts/ 中，勿删。
+静态站点服务器 —— 长期工具，按 AGENTS.md 规矩放在 scripts/ 中，勿删。
 
 用法：
     python3 scripts/serve.py                    # 默认：site/ 目录 · 0.0.0.0:8000
